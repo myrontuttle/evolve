@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Evolve
+Bundle-SymbolicName: com.myrontuttle.evolve
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: com.myrontuttle.evolve.Activator
+Bundle-Vendor: MyronTuttle
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Import-Package: org.osgi.framework;version="1.3.0"
+Export-Package: com.myrontuttle.evolve,
+ com.myrontuttle.evolve.factories,
+ com.myrontuttle.evolve.operators,
+ com.myrontuttle.evolve.selection,
+ com.myrontuttle.evolve.termination,
+ com.myrontuttle.evolve.util.random
