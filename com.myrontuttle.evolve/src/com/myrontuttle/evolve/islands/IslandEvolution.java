@@ -33,6 +33,7 @@ import com.myrontuttle.evolve.EvolutionEngine;
 import com.myrontuttle.evolve.EvolutionObserver;
 import com.myrontuttle.evolve.EvolutionUtils;
 import com.myrontuttle.evolve.EvolutionaryOperator;
+import com.myrontuttle.evolve.ExpressedFitnessEvaluator;
 import com.myrontuttle.evolve.ExpressionStrategy;
 import com.myrontuttle.evolve.FitnessEvaluator;
 import com.myrontuttle.evolve.GenerationalEvolutionEngine;
@@ -81,18 +82,36 @@ public class IslandEvolution<T>
                            CandidateFactory<T> candidateFactory,
                            EvolutionaryOperator<T> evolutionScheme,
                            FitnessEvaluator<? super T> fitnessEvaluator,
-                           ExpressionStrategy<T> expressionStrategy,
                            SelectionStrategy<? super T> selectionStrategy,
                            Random rng) {
         this(createIslands(islandCount,
                            candidateFactory,
                            evolutionScheme,
                            fitnessEvaluator,
-                           expressionStrategy,
                            selectionStrategy,
                            rng),
              migration,
              fitnessEvaluator.isNatural(),
+             rng);
+    }
+
+    public IslandEvolution(int islandCount,
+                           Migration migration,
+                           CandidateFactory<T> candidateFactory,
+                           EvolutionaryOperator<T> evolutionScheme,
+                           ExpressedFitnessEvaluator<T> expressedFitnessEvaluator,
+                           ExpressionStrategy<T> expressionStrategy,
+                           SelectionStrategy<? super T> selectionStrategy,
+                           Random rng) {
+        this(createIslands(islandCount,
+                           candidateFactory,
+                           evolutionScheme,
+                           expressedFitnessEvaluator,
+                           expressionStrategy,
+                           selectionStrategy,
+                           rng),
+             migration,
+             expressedFitnessEvaluator.isNatural(),
              rng);
     }
 
@@ -147,7 +166,6 @@ public class IslandEvolution<T>
                                                               CandidateFactory<T> candidateFactory,
                                                               EvolutionaryOperator<T> evolutionScheme,
                                                               FitnessEvaluator<? super T> fitnessEvaluator,
-                                                              ExpressionStrategy<T> expressionStrategy,
                                                               SelectionStrategy<? super T> selectionStrategy,
                                                               Random rng) {
         List<EvolutionEngine<T>> islands = new ArrayList<EvolutionEngine<T>>(islandCount);
@@ -155,7 +173,6 @@ public class IslandEvolution<T>
             GenerationalEvolutionEngine<T> island = new GenerationalEvolutionEngine<T>(candidateFactory,
                                                                                        evolutionScheme,
                                                                                        fitnessEvaluator,
-                                                                                       expressionStrategy,
                                                                                        selectionStrategy,
                                                                                        rng);
             island.setSingleThreaded(true); // Don't need fine-grained concurrency when each island is on a separate thread.
@@ -164,6 +181,26 @@ public class IslandEvolution<T>
         return islands;
     }
 
+    private static <T> List<EvolutionEngine<T>> createIslands(int islandCount,
+                                                              CandidateFactory<T> candidateFactory,
+                                                              EvolutionaryOperator<T> evolutionScheme,
+                                                              ExpressedFitnessEvaluator<T> expressedFitnessEvaluator,
+                                                              ExpressionStrategy<T> expressionStrategy,
+                                                              SelectionStrategy<? super T> selectionStrategy,
+                                                              Random rng) {
+        List<EvolutionEngine<T>> islands = new ArrayList<EvolutionEngine<T>>(islandCount);
+        for (int i = 0; i < islandCount; i++) {
+            GenerationalEvolutionEngine<T> island = new GenerationalEvolutionEngine<T>(candidateFactory,
+                                                                                       evolutionScheme,
+                                                                                       expressedFitnessEvaluator,
+                                                                                       expressionStrategy,
+                                                                                       selectionStrategy,
+                                                                                       rng);
+            island.setSingleThreaded(true); // Don't need fine-grained concurrency when each island is on a separate thread.
+            islands.add(island);
+        }
+        return islands;
+    }
 
     /**
      * <p>Start the evolutionary process on each island and return the fittest candidate so far at the point

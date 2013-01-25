@@ -75,12 +75,27 @@ public class SteadyStateEvolutionEngine<T> extends AbstractEvolutionEngine<T>
                                       EvolutionaryOperator<T> evolutionScheme,
                                       FitnessEvaluator<? super T> fitnessEvaluator,
                                       SelectionStrategy<? super T> selectionStrategy,
-                                      ExpressionStrategy<T> expressionStrategy,
                                       int selectionSize,
                                       boolean forceSingleCandidateUpdate,
                                       Random rng) {
-        super(candidateFactory, fitnessEvaluator, expressionStrategy, rng);
+        super(candidateFactory, fitnessEvaluator, rng);
         this.fitnessEvaluator = fitnessEvaluator;
+        this.evolutionScheme = evolutionScheme;
+        this.selectionStrategy = selectionStrategy;
+        this.selectionSize = selectionSize;
+        this.forceSingleCandidateUpdate = forceSingleCandidateUpdate;
+    }
+
+    public SteadyStateEvolutionEngine(CandidateFactory<T> candidateFactory,
+                                      EvolutionaryOperator<T> evolutionScheme,
+                                      ExpressedFitnessEvaluator<T> expressedFitnessEvaluator,
+                                      ExpressionStrategy<T> expressionStrategy,
+                                      SelectionStrategy<? super T> selectionStrategy,
+                                      int selectionSize,
+                                      boolean forceSingleCandidateUpdate,
+                                      Random rng) {
+        super(candidateFactory, expressedFitnessEvaluator, expressionStrategy, rng);
+        this.fitnessEvaluator = null;
         this.evolutionScheme = evolutionScheme;
         this.selectionStrategy = selectionStrategy;
         this.selectionSize = selectionSize;

@@ -47,6 +47,7 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
     private final CandidateFactory<T> candidateFactory;
     private final FitnessEvaluator<? super T> fitnessEvaluator;
     private final ExpressionStrategy<T> expressionStrategy;
+    private final ExpressedFitnessEvaluator<T> expressedFitnessEvaluator;
 
     private volatile boolean singleThreaded = false;
 
@@ -65,15 +66,38 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
      * evolutionary operators and selection strategies).
      */
     protected AbstractEvolutionEngine(CandidateFactory<T> candidateFactory,
-                                      FitnessEvaluator<? super T> fitnessEvaluator,
+                                      ExpressedFitnessEvaluator<T> expressedFitnessEvaluator,
                                       ExpressionStrategy<T> expressionStrategy,
                                       Random rng) {
         this.candidateFactory = candidateFactory;
-        this.fitnessEvaluator = fitnessEvaluator;
+        this.expressedFitnessEvaluator = expressedFitnessEvaluator;
         this.expressionStrategy = expressionStrategy;
         this.rng = rng;
+
+        this.fitnessEvaluator = null;
     }
 
+    /**
+     * Creates a new evolution engine by specifying the various components required by
+     * an evolutionary algorithm.
+     * @param candidateFactory Factory used to create the initial population that is
+     * iteratively evolved.
+     * @param fitnessEvaluator A function for assigning fitness scores to candidate
+     * solutions.
+     * @param expressionStrategy A strategy for expressing candidates.
+     * @param rng The source of randomness used by all stochastic processes (including
+     * evolutionary operators and selection strategies).
+     */
+    protected AbstractEvolutionEngine(CandidateFactory<T> candidateFactory,
+                                      FitnessEvaluator<? super T> fitnessEvaluator,
+                                      Random rng) {
+        this.candidateFactory = candidateFactory;
+        this.fitnessEvaluator = fitnessEvaluator;
+        this.expressionStrategy = null;
+        this.expressedFitnessEvaluator = null;
+        this.rng = rng;
+    }
+    
     /**
      * {@inheritDoc}
      */
@@ -141,13 +165,18 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
                                                                         seedCandidates,
                                                                         rng);
         
+        List<EvaluatedCandidate<T>> evaluatedPopulation;
         // Express each candidate in the population if there's an expressionStrategy
-        if (expressionStrategy != null) {
+        if (expressionStrategy != null && expressedFitnessEvaluator != null) {
             List<ExpressedCandidate<T>> expressedPopulation = expressPopulation(population);
-        }
 
-        //TODO: Calculate the fitness scores for each member of the expressed population.
-        List<EvaluatedCandidate<T>> evaluatedPopulation = evaluatePopulation(population);
+            //Calculate the fitness scores for each member of the expressed population.
+            evaluatedPopulation = evaluateExpressedPopulation(expressedPopulation);
+        } else {
+
+            //Calculate the fitness scores for each member of the expressed population.
+        	evaluatedPopulation = evaluatePopulation(population);
+        }       
         EvolutionUtils.sortEvaluatedPopulation(evaluatedPopulation, fitnessEvaluator.isNatural());
         PopulationStats<T> stats = EvolutionUtils.getPopulationStats(evaluatedPopulation,
                                                                   fitnessEvaluator.isNatural(),
@@ -244,45 +273,34 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
      * @return The evaluated population (a list of candidates with attached fitness
      * scores).
      */
-    protected List<EvaluatedCandidate<T>> evaluatePopulation(List<T> population)
-    {
+    protected List<EvaluatedCandidate<T>> evaluatePopulation(List<T> population) {
         List<EvaluatedCandidate<T>> evaluatedPopulation = new ArrayList<EvaluatedCandidate<T>>(population.size());
 
-        if (singleThreaded) // Do fitness evaluations on the request thread.
-        {
-            for (T candidate : population)
-            {
+        if (singleThreaded)  {
+        	// Do fitness evaluations on the request thread.
+            for (T candidate : population) {
                 evaluatedPopulation.add(new EvaluatedCandidate<T>(candidate,
                                                                   fitnessEvaluator.getFitness(candidate, population)));
             }
-        }
-        else
-        {
+        } else {
             // Divide the required number of fitness evaluations equally among the
             // available processors and coordinate the threads so that we do not
             // proceed until all threads have finished processing.
-            try
-            {
+            try {
                 List<T> unmodifiablePopulation = Collections.unmodifiableList(population);
                 List<Future<EvaluatedCandidate<T>>> results = new ArrayList<Future<EvaluatedCandidate<T>>>(population.size());
                 // Submit tasks for execution and wait until all threads have finished fitness evaluations.
-                for (T candidate : population)
-                {
+                for (T candidate : population) {
                     results.add(getSharedWorker().submit(new FitnessEvalutationTask<T>(fitnessEvaluator,
                                                                                        candidate,
                                                                                        unmodifiablePopulation)));
                 }
-                for (Future<EvaluatedCandidate<T>> result : results)
-                {
+                for (Future<EvaluatedCandidate<T>> result : results) {
                     evaluatedPopulation.add(result.get());
                 }
-            }
-            catch (ExecutionException ex)
-            {
+            } catch (ExecutionException ex) {
                 throw new IllegalStateException("Fitness evaluation task execution failed.", ex);
-            }
-            catch (InterruptedException ex)
-            {
+            } catch (InterruptedException ex) {
                 // Restore the interrupted status, allows methods further up the call-stack
                 // to abort processing if appropriate.
                 Thread.currentThread().interrupt();
@@ -292,6 +310,52 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
         return evaluatedPopulation;
     }
 
+    /**
+     * Takes a population, assigns a fitness score to each member and returns
+     * the members with their scores attached, sorted in descending order of
+     * fitness (descending order of fitness score for natural scores, ascending
+     * order of scores for non-natural scores).
+     * @param population The population to evaluate (each candidate is assigned
+     * a fitness score).
+     * @return The evaluated population (a list of candidates with attached fitness
+     * scores).
+     */
+    protected List<EvaluatedCandidate<T>> evaluateExpressedPopulation(List<ExpressedCandidate<T>> population) {
+        List<EvaluatedCandidate<T>> evaluatedPopulation = new ArrayList<EvaluatedCandidate<T>>(population.size());
+
+        if (singleThreaded)  {
+        	// Do fitness evaluations on the request thread.
+            for (ExpressedCandidate<T> candidate : population) {
+                evaluatedPopulation.add(new EvaluatedCandidate<T>(candidate,
+                            expressedFitnessEvaluator.getFitness(candidate, population)));
+            }
+        } else {
+            // Divide the required number of fitness evaluations equally among the
+            // available processors and coordinate the threads so that we do not
+            // proceed until all threads have finished processing.
+            try {
+                List<ExpressedCandidate<T>> unmodifiablePopulation = Collections.unmodifiableList(population);
+                List<Future<EvaluatedCandidate<T>>> results = new ArrayList<Future<EvaluatedCandidate<T>>>(population.size());
+                // Submit tasks for execution and wait until all threads have finished fitness evaluations.
+                for (ExpressedCandidate<T> candidate : population) {
+                    results.add(getSharedWorker().submit(new ExpressedFitnessEvalutationTask<T>(expressedFitnessEvaluator,
+                                                                                       candidate,
+                                                                                       unmodifiablePopulation)));
+                }
+                for (Future<EvaluatedCandidate<T>> result : results) {
+                    evaluatedPopulation.add(result.get());
+                }
+            } catch (ExecutionException ex) {
+                throw new IllegalStateException("Fitness evaluation task execution failed.", ex);
+            } catch (InterruptedException ex) {
+                // Restore the interrupted status, allows methods further up the call-stack
+                // to abort processing if appropriate.
+                Thread.currentThread().interrupt();
+            }
+        }
+
+        return evaluatedPopulation;
+    }
 
 
     /**
@@ -357,10 +421,8 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
      * Send the population stats to all registered observers.
      * @param stats Information about the current state of the population.
      */
-    private void notifyPopulationChange(PopulationStats<T> stats)
-    {
-        for (EvolutionObserver<? super T> observer : observers)
-        {
+    private void notifyPopulationChange(PopulationStats<T> stats) {
+        for (EvolutionObserver<? super T> observer : observers) {
             observer.populationUpdate(stats);
         }
     }

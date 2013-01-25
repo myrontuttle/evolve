@@ -83,6 +83,10 @@ public class FitnessEvaluationWorker
         return executor.submit(task);
     }
 
+    public <T> Future<EvaluatedCandidate<T>> submit(ExpressedFitnessEvalutationTask<T> task)
+    {
+        return executor.submit(task);
+    }
 
     /**
      * Entry-point for running this class standalone, as an additional node for fitness evaluations.

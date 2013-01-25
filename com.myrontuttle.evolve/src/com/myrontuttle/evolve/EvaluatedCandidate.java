@@ -38,6 +38,18 @@ public final class EvaluatedCandidate<T> implements Comparable<EvaluatedCandidat
     }
 
     /**
+     * @param candidate The evolved candidate.
+     * @param fitness The candidates fitness score.
+     */
+    public EvaluatedCandidate(ExpressedCandidate<T> candidate, double fitness) {
+        if (fitness < 0) {
+            throw new IllegalArgumentException("Fitness score must be greater than or equal to zero.");
+        }
+        this.candidate = candidate.getGenome();
+        this.fitness = fitness;
+    }
+    
+    /**
      * @return The evolved candidate solution.
      */
     public T getCandidate() {

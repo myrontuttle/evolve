@@ -6,6 +6,12 @@ package com.myrontuttle.evolve;
  * @param <T> The candidate type.
  */
 public interface ExpressedCandidate<T> extends Comparable<ExpressedCandidate<T>> {
+	
+	/**
+	 * Gets the underlying candidate genome for evolving
+	 * @return T The candidate's genome
+	 */
+	public T getGenome();
 
     /**
      * Compares this candidate's expression with that of the specified

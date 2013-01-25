@@ -65,13 +65,26 @@ public class GenerationalEvolutionEngine<T> extends AbstractEvolutionEngine<T>
     public GenerationalEvolutionEngine(CandidateFactory<T> candidateFactory,
                                        EvolutionaryOperator<T> evolutionScheme,
                                        FitnessEvaluator<? super T> fitnessEvaluator,
+                                       SelectionStrategy<? super T> selectionStrategy,
+                                       Random rng)
+    {
+        super(candidateFactory, fitnessEvaluator, rng);
+        this.evolutionScheme = evolutionScheme;
+        this.fitnessEvaluator = fitnessEvaluator;
+        this.selectionStrategy = selectionStrategy;
+    }
+    
+
+    public GenerationalEvolutionEngine(CandidateFactory<T> candidateFactory,
+                                       EvolutionaryOperator<T> evolutionScheme,
+                                       ExpressedFitnessEvaluator<T> expressedFitnessEvaluator,
                                        ExpressionStrategy<T> expressionStrategy,
                                        SelectionStrategy<? super T> selectionStrategy,
                                        Random rng)
     {
-        super(candidateFactory, fitnessEvaluator, expressionStrategy, rng);
+        super(candidateFactory, expressedFitnessEvaluator, expressionStrategy, rng);
         this.evolutionScheme = evolutionScheme;
-        this.fitnessEvaluator = fitnessEvaluator;
+        this.fitnessEvaluator = null;
         this.selectionStrategy = selectionStrategy;
     }
 

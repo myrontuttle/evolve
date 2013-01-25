@@ -64,14 +64,28 @@ public class EvolutionStrategyEngine<T> extends AbstractEvolutionEngine<T>
     public EvolutionStrategyEngine(CandidateFactory<T> candidateFactory,
                                    EvolutionaryOperator<T> evolutionScheme,
                                    FitnessEvaluator<? super T> fitnessEvaluator,
+                                   boolean plusSelection,
+                                   int offspringMultiplier,
+                                   Random rng)
+    {
+        super(candidateFactory, fitnessEvaluator, rng);
+        this.evolutionScheme = evolutionScheme;
+        this.fitnessEvaluator = fitnessEvaluator;
+        this.plusSelection = plusSelection;
+        this.offspringMultiplier = offspringMultiplier;
+    }
+
+    public EvolutionStrategyEngine(CandidateFactory<T> candidateFactory,
+                                   EvolutionaryOperator<T> evolutionScheme,
+                                   ExpressedFitnessEvaluator<T> expressedFitnessEvaluator,
                                    ExpressionStrategy<T> expressionStrategy,
                                    boolean plusSelection,
                                    int offspringMultiplier,
                                    Random rng)
     {
-        super(candidateFactory, fitnessEvaluator, expressionStrategy, rng);
+        super(candidateFactory, expressedFitnessEvaluator, expressionStrategy, rng);
         this.evolutionScheme = evolutionScheme;
-        this.fitnessEvaluator = fitnessEvaluator;
+        this.fitnessEvaluator = null;
         this.plusSelection = plusSelection;
         this.offspringMultiplier = offspringMultiplier;
     }
