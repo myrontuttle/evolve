@@ -166,17 +166,18 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
                                                                         rng);
         
         List<EvaluatedCandidate<T>> evaluatedPopulation;
-        // Express each candidate in the population if there's an expressionStrategy
-        if (expressionStrategy != null && expressedFitnessEvaluator != null) {
+        if (includeExpression()) {
+
+            // Express each candidate in the population
             List<ExpressedCandidate<T>> expressedPopulation = expressPopulation(population);
 
             //Calculate the fitness scores for each member of the expressed population.
             evaluatedPopulation = evaluateExpressedPopulation(expressedPopulation);
         } else {
 
-            //Calculate the fitness scores for each member of the expressed population.
+            //Calculate the fitness scores for each member of the population.
         	evaluatedPopulation = evaluatePopulation(population);
-        }       
+        }
         EvolutionUtils.sortEvaluatedPopulation(evaluatedPopulation, fitnessEvaluator.isNatural());
         PopulationStats<T> stats = EvolutionUtils.getPopulationStats(evaluatedPopulation,
                                                                   fitnessEvaluator.isNatural(),
@@ -206,6 +207,13 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
         return evaluatedPopulation;
     }
 
+    protected boolean includeExpression() {
+    	if (expressionStrategy != null && expressedFitnessEvaluator != null) {
+    		return true;
+    	} else {
+    		return false;
+    	}
+    }
     
     /**
      * This method performs a single step/iteration of the evolutionary process.

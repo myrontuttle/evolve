@@ -119,7 +119,20 @@ public class EvolutionStrategyEngine<T> extends AbstractEvolutionEngine<T>
         // Then evolve the parents.
         List<T> offspring = evolutionScheme.apply(parents, rng);
 
-        List<EvaluatedCandidate<T>> evaluatedOffspring = evaluatePopulation(offspring);
+        List<EvaluatedCandidate<T>> evaluatedOffspring;
+        if (includeExpression()) {
+
+            // Express each candidate in the population
+            List<ExpressedCandidate<T>> expressedPopulation = expressPopulation(offspring);
+
+            //Calculate the fitness scores for each member of the expressed population.
+            evaluatedOffspring = evaluateExpressedPopulation(expressedPopulation);
+        } else {
+
+            //Calculate the fitness scores for each member of the population.
+        	evaluatedOffspring = evaluatePopulation(offspring);
+        }
+        
         if (plusSelection) // Plus-selection means parents are considered for survival as well as offspring.
         {
             evaluatedOffspring.addAll(evaluatedPopulation);

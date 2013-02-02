@@ -115,7 +115,20 @@ public class SteadyStateEvolutionEngine<T> extends AbstractEvolutionEngine<T>
                                                               fitnessEvaluator.isNatural(),
                                                               selectionSize,
                                                               rng);
-        List<EvaluatedCandidate<T>> offspring = evaluatePopulation(evolutionScheme.apply(selectedCandidates, rng));
+        
+        List<EvaluatedCandidate<T>> offspring;
+        if (includeExpression()) {
+
+            // Express selected candidates in the population
+            List<ExpressedCandidate<T>> expressedPopulation = expressPopulation(evolutionScheme.apply(selectedCandidates, rng));
+
+            //Calculate the fitness scores for each member of the expressed population.
+            offspring = evaluateExpressedPopulation(expressedPopulation);
+        } else {
+
+            //Calculate the fitness scores for the selected candidates.
+            offspring = evaluatePopulation(evolutionScheme.apply(selectedCandidates, rng));
+        }
 
         doReplacement(evaluatedPopulation, offspring, eliteCount, rng);
 

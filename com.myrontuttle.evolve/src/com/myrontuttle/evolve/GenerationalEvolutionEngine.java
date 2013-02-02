@@ -141,6 +141,18 @@ public class GenerationalEvolutionEngine<T> extends AbstractEvolutionEngine<T>
         population = evolutionScheme.apply(population, rng);
         // When the evolution is finished, add the elite to the population.
         population.addAll(elite);
-        return evaluatePopulation(population);
+        
+        if (includeExpression()) {
+
+            // Express each candidate in the population
+            List<ExpressedCandidate<T>> expressedPopulation = expressPopulation(population);
+
+            //Calculate the fitness scores for each member of the expressed population.
+            return evaluateExpressedPopulation(expressedPopulation);
+        } else {
+
+            //Calculate the fitness scores for each member of the population.
+        	return evaluatePopulation(population);
+        }
     }
 }
