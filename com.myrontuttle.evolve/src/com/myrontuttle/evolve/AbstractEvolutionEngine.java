@@ -51,7 +51,10 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
 
     private volatile boolean singleThreaded = false;
 
-    private List<TerminationCondition> satisfiedTerminationConditions;
+    protected List<TerminationCondition> satisfiedTerminationConditions;
+    private TerminationCondition[] terminationConditions;
+    private int currentGenerationIndex;
+    private long startTime;
 
 
     /**
@@ -98,6 +101,18 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
         this.rng = rng;
     }
     
+    protected int getCurrentGenerationIndex() {
+    	return currentGenerationIndex;
+    }
+    
+    protected long getStartTime() {
+    	return startTime;
+    }
+    
+    protected TerminationCondition[] getTerminationConditions() {
+    	return terminationConditions;
+    }
+    
     /**
      * {@inheritDoc}
      */
@@ -125,7 +140,6 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
                                 conditions).get(0).getCandidate();
     }
 
-
     /**
      * {@inheritDoc}
      */
@@ -146,20 +160,17 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
     public List<EvaluatedCandidate<T>> evolvePopulation(int populationSize,
                                                         int eliteCount,
                                                         Collection<T> seedCandidates,
-                                                        TerminationCondition... conditions)
-    {
-        if (eliteCount < 0 || eliteCount >= populationSize)
-        {
+                                                        TerminationCondition... conditions) {
+        if (eliteCount < 0 || eliteCount >= populationSize) {
             throw new IllegalArgumentException("Elite count must be non-negative and less than population size.");
         }
-        if (conditions.length == 0)
-        {
+        if (conditions.length == 0) {
             throw new IllegalArgumentException("At least one TerminationCondition must be specified.");
         }
 
         satisfiedTerminationConditions = null;
-        int currentGenerationIndex = 0;
-        long startTime = System.currentTimeMillis();
+        currentGenerationIndex = 0;
+        startTime = System.currentTimeMillis();
 
         List<T> population = candidateFactory.generateInitialPopulation(populationSize,
                                                                         seedCandidates,
@@ -170,7 +181,18 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
 
             // Express each candidate in the population
             List<ExpressedCandidate<T>> expressedPopulation = expressPopulation(population);
-
+            
+            ExpressedPopulation<T> expressedStats = 
+            		new ExpressedPopulation<T>(
+            				expressedPopulation,
+            				fitnessEvaluator.isNatural(),
+            				expressedPopulation.size(),
+            				eliteCount,
+            				currentGenerationIndex,
+            				startTime);
+            
+            notifyPopulationExpressed(expressedPopulation, expressedStats);
+            
             //Calculate the fitness scores for each member of the expressed population.
             evaluatedPopulation = evaluateExpressedPopulation(expressedPopulation);
         } else {
@@ -180,10 +202,10 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
         }
         EvolutionUtils.sortEvaluatedPopulation(evaluatedPopulation, fitnessEvaluator.isNatural());
         PopulationStats<T> stats = EvolutionUtils.getPopulationStats(evaluatedPopulation,
-                                                                  fitnessEvaluator.isNatural(),
-                                                                  eliteCount,
-                                                                  currentGenerationIndex,
-                                                                  startTime);
+                                                  fitnessEvaluator.isNatural(),
+                                                  eliteCount,
+                                                  currentGenerationIndex,
+                                                  startTime);
         
         // Notify observers of the state of the population.
         notifyPopulationChange(stats);
@@ -206,7 +228,60 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
         this.satisfiedTerminationConditions = satisfiedConditions;
         return evaluatedPopulation;
     }
+    
 
+    /**
+     * Evolves an existing list of expressed candidates to the next expression of
+     * candidates.
+     */
+    public List<ExpressedCandidate<T>> evolveToExpression(
+    										ExpressedPopulation<T> pop,
+    										int populationSize,
+            								TerminationCondition... conditions) {
+    	
+    	if (pop.getExpressedCandidates().isEmpty()) {
+    		 if (pop.getEliteCount() < 0 || pop.getEliteCount() >= populationSize) {
+    			 throw new IllegalArgumentException("Elite count must be non-negative and less than population size.");
+    		 }
+    		 if (conditions.length == 0) {
+    			 throw new IllegalArgumentException("At least one TerminationCondition must be specified.");
+    		 }
+
+    		 satisfiedTerminationConditions = null;
+    		 currentGenerationIndex = 0;
+    		 startTime = System.currentTimeMillis();
+
+    		 List<T> population = candidateFactory.generateInitialPopulation(populationSize,
+    	                                                                        rng);
+    		 // Express each candidate in the population
+             List<ExpressedCandidate<T>> expressedPopulation = expressPopulation(population);
+             
+             ExpressedPopulation<T> expressedStats = 
+             		new ExpressedPopulation<T>(
+             				expressedPopulation,
+             				fitnessEvaluator.isNatural(),
+             				expressedPopulation.size(),
+             				pop.getEliteCount(),
+             				currentGenerationIndex,
+             				startTime);
+             
+             notifyPopulationExpressed(expressedPopulation, expressedStats);
+             
+             return expressedPopulation;
+    	} else {
+
+    		this.terminationConditions = terminationConditions;
+
+        	++currentGenerationIndex;
+
+            return nextExpressionStep(pop.getExpressedCandidates(), pop.getEliteCount(), rng);
+    	}
+    }
+
+    /**
+     * Indicates whether to include gene expression in evolution
+     * @return Indicates gene expression use
+     */
     protected boolean includeExpression() {
     	if (expressionStrategy != null && expressedFitnessEvaluator != null) {
     		return true;
@@ -224,6 +299,19 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
      * by one step/iteration.
      */
     protected abstract List<EvaluatedCandidate<T>> nextEvolutionStep(List<EvaluatedCandidate<T>> evaluatedPopulation,
+                                                                     int eliteCount,
+                                                                     Random rng);
+
+    /**
+     * This method performs a single step/iteration of the evolutionary process up to
+     * the expression of the candidates.
+     * @param expressedPopulation The population at the beginning of the process.
+     * @param eliteCount The number of the fittest individuals that must be preserved.
+     * @param rng A source of randomness.
+     * @return The updated population after the evolutionary process has proceeded
+     * by one step/iteration.
+     */
+    protected abstract List<ExpressedCandidate<T>> nextExpressionStep(List<ExpressedCandidate<T>> expressedPopulation,
                                                                      int eliteCount,
                                                                      Random rng);
 
@@ -429,12 +517,20 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
      * Send the population stats to all registered observers.
      * @param stats Information about the current state of the population.
      */
-    private void notifyPopulationChange(PopulationStats<T> stats) {
+    protected void notifyPopulationChange(PopulationStats<T> stats) {
         for (EvolutionObserver<? super T> observer : observers) {
             observer.populationUpdate(stats);
         }
     }
 
+    /**
+     * Send the expressed population to the Expression Strategy for extra processing
+     * @param stats Information about the current state of the population.
+     */
+    protected void notifyPopulationExpressed(List<ExpressedCandidate<T>> expressedPopulation,
+    											ExpressedPopulation<T> stats) {
+        expressionStrategy.populationExpressed(expressedPopulation, stats);
+    }
 
     /**
      * By default, fitness evaluations are performed on separate threads (as many as there are

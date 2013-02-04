@@ -122,6 +122,17 @@ public class SteadyStateEvolutionEngine<T> extends AbstractEvolutionEngine<T>
             // Express selected candidates in the population
             List<ExpressedCandidate<T>> expressedPopulation = expressPopulation(evolutionScheme.apply(selectedCandidates, rng));
 
+            ExpressedPopulation<T> expressedStats = 
+            		new ExpressedPopulation<T>(
+            				expressedPopulation,
+            				fitnessEvaluator.isNatural(),
+            				expressedPopulation.size(),
+            				eliteCount,
+            				getCurrentGenerationIndex(),
+            				getStartTime());
+            
+            notifyPopulationExpressed(expressedPopulation, expressedStats);
+            
             //Calculate the fitness scores for each member of the expressed population.
             offspring = evaluateExpressedPopulation(expressedPopulation);
         } else {
@@ -166,6 +177,88 @@ public class SteadyStateEvolutionEngine<T> extends AbstractEvolutionEngine<T>
         {
             for (EvaluatedCandidate<T> candidate : newCandidates)
             {
+                // Replace a randomly selected individual, but not one of the "elite" individuals at the
+                // beginning of the sorted population.
+                existingPopulation.set(rng.nextInt(existingPopulation.size() - eliteCount) + eliteCount, candidate);
+            }
+        }
+    }
+
+	@Override
+	protected List<ExpressedCandidate<T>> nextExpressionStep(
+			List<ExpressedCandidate<T>> expressedPopulation, int eliteCount,
+			Random rng) {
+
+		List<EvaluatedCandidate<T>> evaluatedPopulation = evaluateExpressedPopulation(expressedPopulation);
+
+        EvolutionUtils.sortEvaluatedPopulation(evaluatedPopulation, fitnessEvaluator.isNatural());
+        PopulationStats<T> stats = EvolutionUtils.getPopulationStats(evaluatedPopulation,
+                                                  fitnessEvaluator.isNatural(),
+                                                  eliteCount,
+                                                  getCurrentGenerationIndex(),
+                                                  getStartTime());
+        
+        // Notify observers of the state of the population.
+        notifyPopulationChange(stats);
+
+        List<TerminationCondition> satisfiedConditions = EvolutionUtils.shouldContinue(stats, getTerminationConditions());
+        if (satisfiedConditions == null) {
+
+            EvolutionUtils.sortEvaluatedPopulation(evaluatedPopulation, fitnessEvaluator.isNatural());
+            List<T> selectedCandidates = selectionStrategy.select(evaluatedPopulation,
+                                                                  fitnessEvaluator.isNatural(),
+                                                                  selectionSize,
+                                                                  rng);
+            
+            // Express selected candidates in the population
+            List<ExpressedCandidate<T>> offspring = expressPopulation(evolutionScheme.apply(selectedCandidates, rng));
+
+            doExpressedReplacement(expressedPopulation, offspring, eliteCount, rng);
+            
+            ExpressedPopulation<T> expressedStats = 
+            		new ExpressedPopulation<T>(
+            				expressedPopulation,
+            				fitnessEvaluator.isNatural(),
+            				expressedPopulation.size(),
+            				eliteCount,
+            				getCurrentGenerationIndex(),
+            				getStartTime());
+            
+            notifyPopulationExpressed(expressedPopulation, expressedStats);
+            
+    		return expressedPopulation;
+        } else {
+            this.satisfiedTerminationConditions = satisfiedConditions;
+        	return expressedPopulation;
+        }
+	}
+
+    /**
+     * Add the offspring to the population, removing the same number of existing individuals to make
+     * space for them.
+     * This method randomly chooses which individuals should be replaced, but it can be over-ridden
+     * in sub-classes if alternative behaviour is required.
+     * @param existingPopulation The full popultation, sorted in descending order of fitness.
+     * @param newCandidates The (unsorted) newly-created individual(s) that should replace existing members
+     * of the population.
+     * @param eliteCount The number of the fittest individuals that should be exempt from being replaced.
+     * @param rng A source of randomness.
+     */
+    protected void doExpressedReplacement(List<ExpressedCandidate<T>> existingPopulation,
+                                 List<ExpressedCandidate<T>> newCandidates,
+                                 int eliteCount,
+                                 Random rng) {
+    	
+        assert newCandidates.size() < existingPopulation.size() - eliteCount : "Too many new candidates for replacement.";
+        // If this is strictly steady-state (only one updated individual per iteration), then we can't keep multiple
+        // evolved individuals, so just pick one at random and use that.
+        if (newCandidates.size() > 1 && forceSingleCandidateUpdate) {
+            // Replace a randomly selected individual, but not one of the "elite" individuals at the
+            // beginning of the sorted population.
+            existingPopulation.set(rng.nextInt(existingPopulation.size() - eliteCount) + eliteCount,
+                                   newCandidates.get(rng.nextInt(newCandidates.size())));
+        } else {
+            for (ExpressedCandidate<T> candidate : newCandidates) {
                 // Replace a randomly selected individual, but not one of the "elite" individuals at the
                 // beginning of the sorted population.
                 existingPopulation.set(rng.nextInt(existingPopulation.size() - eliteCount) + eliteCount, candidate);

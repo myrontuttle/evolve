@@ -125,6 +125,17 @@ public class EvolutionStrategyEngine<T> extends AbstractEvolutionEngine<T>
             // Express each candidate in the population
             List<ExpressedCandidate<T>> expressedPopulation = expressPopulation(offspring);
 
+            ExpressedPopulation<T> expressedStats = 
+            		new ExpressedPopulation<T>(
+            				expressedPopulation,
+            				fitnessEvaluator.isNatural(),
+            				expressedPopulation.size(),
+            				eliteCount,
+            				getCurrentGenerationIndex(),
+            				getStartTime());
+            
+            notifyPopulationExpressed(expressedPopulation, expressedStats);
+            
             //Calculate the fitness scores for each member of the expressed population.
             evaluatedOffspring = evaluateExpressedPopulation(expressedPopulation);
         } else {
@@ -141,4 +152,66 @@ public class EvolutionStrategyEngine<T> extends AbstractEvolutionEngine<T>
         // Retain the fittest of the candidates that are eligible for survival.
         return evaluatedOffspring.subList(0, evaluatedPopulation.size());
     }
+
+	@Override
+	protected List<ExpressedCandidate<T>> nextExpressionStep(
+			List<ExpressedCandidate<T>> expressedPopulation, int eliteCount,
+			Random rng) {
+
+		List<EvaluatedCandidate<T>> evaluatedPopulation = evaluateExpressedPopulation(expressedPopulation);
+
+        EvolutionUtils.sortEvaluatedPopulation(evaluatedPopulation, fitnessEvaluator.isNatural());
+        PopulationStats<T> stats = EvolutionUtils.getPopulationStats(evaluatedPopulation,
+                                                  fitnessEvaluator.isNatural(),
+                                                  eliteCount,
+                                                  getCurrentGenerationIndex(),
+                                                  getStartTime());
+        
+        // Notify observers of the state of the population.
+        notifyPopulationChange(stats);
+
+        List<TerminationCondition> satisfiedConditions = EvolutionUtils.shouldContinue(stats, getTerminationConditions());
+        if (satisfiedConditions == null) {
+        	// Elite count is ignored.  If it's non-zero it doesn't really matter, but if assertions are
+            // enabled we will flag it as wrong.
+            assert eliteCount == 0 : "Explicit elitism is not supported for an ES, eliteCount should be 0.";
+            
+            // Select candidates that will be operated on to create the offspring.
+            int offspringCount = offspringMultiplier * evaluatedPopulation.size();
+            List<T> parents = new ArrayList<T>(offspringCount);
+            for (int i = 0; i < offspringCount; i++) {
+                parents.add(evaluatedPopulation.get(rng.nextInt(evaluatedPopulation.size())).getCandidate());
+            }
+
+            // Then evolve the parents.
+            List<T> offspring = evolutionScheme.apply(parents, rng);
+
+        	if (plusSelection) {
+        		// Plus-selection means parents are considered for survival as well as offspring.
+                for (ExpressedCandidate<T> c : expressedPopulation) {
+                	offspring.add(c.getGenome());
+                }
+            }
+            // Retain the fittest of the candidates that are eligible for survival.
+            // Express each candidate in the population
+            List<ExpressedCandidate<T>> newExpressedPopulation = expressPopulation(offspring.subList(0, evaluatedPopulation.size()));
+
+            ExpressedPopulation<T> expressedStats = 
+            		new ExpressedPopulation<T>(
+            				newExpressedPopulation,
+            				fitnessEvaluator.isNatural(),
+            				newExpressedPopulation.size(),
+            				eliteCount,
+            				getCurrentGenerationIndex(),
+            				getStartTime());
+            
+            notifyPopulationExpressed(newExpressedPopulation, expressedStats);
+            
+            return newExpressedPopulation;
+        } else {
+            this.satisfiedTerminationConditions = satisfiedConditions;
+        	return expressedPopulation;
+        }
+	}
+
 }

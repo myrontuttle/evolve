@@ -21,6 +21,8 @@ import java.util.List;
 
 import java.util.Random;
 
+import com.myrontuttle.evolve.interactive.InteractiveSelection;
+
 /**
  * <p>This class implements a general-purpose generational evolutionary algorithm.
  * It supports optional concurrent fitness evaluations to take full advantage of
@@ -100,7 +102,7 @@ public class GenerationalEvolutionEngine<T> extends AbstractEvolutionEngine<T>
      * console.
      * @param rng The source of randomness used by all stochastic processes (including
      * evolutionary operators and selection strategies).
-     *
+     */
     public GenerationalEvolutionEngine(CandidateFactory<T> candidateFactory,
                                        EvolutionaryOperator<T> evolutionScheme,
                                        InteractiveSelection<T> selectionStrategy,
@@ -111,7 +113,7 @@ public class GenerationalEvolutionEngine<T> extends AbstractEvolutionEngine<T>
              new NullFitnessEvaluator(), // No fitness evaluations to perform.
              selectionStrategy,
              rng);
-    }*/
+    }
 
 
     /**
@@ -147,6 +149,17 @@ public class GenerationalEvolutionEngine<T> extends AbstractEvolutionEngine<T>
             // Express each candidate in the population
             List<ExpressedCandidate<T>> expressedPopulation = expressPopulation(population);
 
+            ExpressedPopulation<T> expressedStats = 
+            		new ExpressedPopulation<T>(
+            				expressedPopulation,
+            				fitnessEvaluator.isNatural(),
+            				expressedPopulation.size(),
+            				eliteCount,
+            				getCurrentGenerationIndex(),
+            				getStartTime());
+            
+            notifyPopulationExpressed(expressedPopulation, expressedStats);
+            
             //Calculate the fitness scores for each member of the expressed population.
             return evaluateExpressedPopulation(expressedPopulation);
         } else {
@@ -155,4 +168,66 @@ public class GenerationalEvolutionEngine<T> extends AbstractEvolutionEngine<T>
         	return evaluatePopulation(population);
         }
     }
+
+	@Override
+	protected List<ExpressedCandidate<T>> nextExpressionStep(
+			List<ExpressedCandidate<T>> expressedPopulation, int eliteCount,
+			Random rng) {
+		
+		List<EvaluatedCandidate<T>> evaluatedPopulation = evaluateExpressedPopulation(expressedPopulation);
+
+        EvolutionUtils.sortEvaluatedPopulation(evaluatedPopulation, fitnessEvaluator.isNatural());
+        PopulationStats<T> stats = EvolutionUtils.getPopulationStats(evaluatedPopulation,
+                                                  fitnessEvaluator.isNatural(),
+                                                  eliteCount,
+                                                  getCurrentGenerationIndex(),
+                                                  getStartTime());
+        
+        // Notify observers of the state of the population.
+        notifyPopulationChange(stats);
+
+        List<TerminationCondition> satisfiedConditions = EvolutionUtils.shouldContinue(stats, getTerminationConditions());
+        if (satisfiedConditions == null) {
+
+    		List<T> population = new ArrayList<T>(evaluatedPopulation.size());
+
+            // First perform any elitist selection.
+            List<T> elite = new ArrayList<T>(eliteCount);
+            Iterator<EvaluatedCandidate<T>> iterator = evaluatedPopulation.iterator();
+            while (elite.size() < eliteCount)
+            {
+                elite.add(iterator.next().getCandidate());
+            }
+            // Then select candidates that will be operated on to create the evolved
+            // portion of the next generation.
+            population.addAll(selectionStrategy.select(evaluatedPopulation,
+                                                       fitnessEvaluator.isNatural(),
+                                                       evaluatedPopulation.size() - eliteCount,
+                                                       rng));
+            // Then evolve the population.
+            population = evolutionScheme.apply(population, rng);
+            // When the evolution is finished, add the elite to the population.
+            population.addAll(elite);
+            
+
+            // Express each candidate in the population
+            List<ExpressedCandidate<T>> newExpressedPopulation = expressPopulation(population);
+
+            ExpressedPopulation<T> expressedStats = 
+            		new ExpressedPopulation<T>(
+            				newExpressedPopulation,
+            				fitnessEvaluator.isNatural(),
+            				newExpressedPopulation.size(),
+            				eliteCount,
+            				getCurrentGenerationIndex(),
+            				getStartTime());
+            
+            notifyPopulationExpressed(newExpressedPopulation, expressedStats);
+            
+    		return newExpressedPopulation;
+        } else {
+            this.satisfiedTerminationConditions = satisfiedConditions;
+        	return expressedPopulation;
+        }
+	}
 }
