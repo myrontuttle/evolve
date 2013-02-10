@@ -48,6 +48,10 @@ public class IntArrayFactory extends AbstractCandidateFactory<int[]> {
     	this(length, upperBound, lowerBound, upperBounds, new int[0]);
     }
     
+    public IntArrayFactory(int[] upperBounds, int[] lowerBounds) {
+		this(upperBounds.length, 1, -1, upperBounds, lowerBounds);
+	}
+    
     /**
      * @param length The length of all integer arrays created by this factory.
      * @param upperBound The upperBound of all integers in the array. 
@@ -91,7 +95,7 @@ public class IntArrayFactory extends AbstractCandidateFactory<int[]> {
     	}
     }
 
-    /**
+	/**
      * Generates a random integer array.
      * @param rng The source of randomness for setting the integers.
      * @return A random integer array of the length configured for this
