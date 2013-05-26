@@ -153,7 +153,6 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
                                 conditions);
     }
 
-
     /**
      * {@inheritDoc}
      */
@@ -229,18 +228,17 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
         return evaluatedPopulation;
     }
     
-
     /**
-     * Evolves an existing list of expressed candidates to the next expression of
-     * candidates.
+     * {@inheritDoc}
      */
     public List<ExpressedCandidate<T>> evolveToExpression(
     										ExpressedPopulation<T> pop,
     										int populationSize,
+    										int eliteCount,
             								TerminationCondition... conditions) {
     	
-    	if (pop.getExpressedCandidates().isEmpty()) {
-    		 if (pop.getEliteCount() < 0 || pop.getEliteCount() >= populationSize) {
+    	if (pop == null || pop.getExpressedCandidates().isEmpty()) {
+    		 if (eliteCount < 0 || eliteCount >= populationSize) {
     			 throw new IllegalArgumentException("Elite count must be non-negative and less than population size.");
     		 }
     		 if (conditions.length == 0) {
@@ -261,7 +259,7 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
              				expressedPopulation,
              				fitnessEvaluator.isNatural(),
              				expressedPopulation.size(),
-             				pop.getEliteCount(),
+             				eliteCount,
              				currentGenerationIndex,
              				startTime);
              

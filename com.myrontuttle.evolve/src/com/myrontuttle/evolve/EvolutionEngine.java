@@ -120,6 +120,27 @@ public interface EvolutionEngine<T>
                                                  int eliteCount,
                                                  Collection<T> seedCandidates,
                                                  TerminationCondition... conditions);
+    /**
+     * Evolves an existing list of expressed candidates to the next expression of
+     * candidates.
+     * @param pop A population of expressed candidates to be evolved until they're expressed
+     * again.
+     * @param populationSize The number of candidate solutions present in the population
+     * at any point in time.
+     * @param eliteCount The number of candidates preserved via elitism.  In elitism, a
+     * sub-set of the population with the best fitness scores are preserved unchanged in
+     * the subsequent generation.  Candidate solutions that are preserved unchanged through
+     * elitism remain eligible for selection for breeding the remainder of the next generation.
+     * This value must be non-negative and less than the population size.  A value of zero
+     * means that no elitism will be applied.
+     * @param conditions One or more conditions that may cause the evolution to terminate.
+     * @return The fittest solution found by the evolutionary process.
+     */
+    public List<ExpressedCandidate<T>> evolveToExpression(
+    										ExpressedPopulation<T> pop,
+    										int populationSize,
+    										int eliteCount,
+            								TerminationCondition... conditions);
 
 
     /**
