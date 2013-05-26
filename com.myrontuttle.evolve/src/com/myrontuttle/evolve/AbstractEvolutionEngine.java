@@ -270,7 +270,7 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
              return expressedPopulation;
     	} else {
 
-    		this.terminationConditions = terminationConditions;
+    		this.terminationConditions = conditions;
 
         	++currentGenerationIndex;
 
