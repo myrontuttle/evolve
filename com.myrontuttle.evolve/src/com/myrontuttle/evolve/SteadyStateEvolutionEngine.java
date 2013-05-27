@@ -120,18 +120,19 @@ public class SteadyStateEvolutionEngine<T> extends AbstractEvolutionEngine<T>
         if (includeExpression()) {
 
             // Express selected candidates in the population
-            List<ExpressedCandidate<T>> expressedPopulation = expressPopulation(evolutionScheme.apply(selectedCandidates, rng));
+            List<ExpressedCandidate<T>> expressedCandidates = 
+            		expressPopulation(evolutionScheme.apply(selectedCandidates, rng));
 
-            ExpressedPopulation<T> expressedStats = 
+            ExpressedPopulation<T> expressedPopulation = 
             		new ExpressedPopulation<T>(
-            				expressedPopulation,
+            				expressedCandidates,
             				fitnessEvaluator.isNatural(),
-            				expressedPopulation.size(),
+            				expressedCandidates.size(),
             				eliteCount,
             				getCurrentGenerationIndex(),
             				getStartTime());
             
-            notifyPopulationExpressed(expressedPopulation, expressedStats);
+            notifyPopulationExpressed(expressedPopulation);
             
             //Calculate the fitness scores for each member of the expressed population.
             offspring = evaluateExpressedPopulation(expressedPopulation);
@@ -186,11 +187,14 @@ public class SteadyStateEvolutionEngine<T> extends AbstractEvolutionEngine<T>
 
 	@Override
 	protected List<ExpressedCandidate<T>> nextExpressionStep(
-			List<ExpressedCandidate<T>> expressedPopulation, int eliteCount,
-			Random rng) {
+			ExpressedPopulation<T> expressedPopulation, Random rng) {
 
-		List<EvaluatedCandidate<T>> evaluatedPopulation = evaluateExpressedPopulation(expressedPopulation);
-
+		int eliteCount = expressedPopulation.getEliteCount();
+    	List<ExpressedCandidate<T>> expressedCandidates = expressedPopulation.getExpressedCandidates();
+    	
+		List<EvaluatedCandidate<T>> evaluatedPopulation = 
+				evaluateExpressedPopulation(expressedPopulation);
+    	
         EvolutionUtils.sortEvaluatedPopulation(evaluatedPopulation, fitnessEvaluator.isNatural());
         PopulationStats<T> stats = EvolutionUtils.getPopulationStats(evaluatedPopulation,
                                                   fitnessEvaluator.isNatural(),
@@ -213,23 +217,24 @@ public class SteadyStateEvolutionEngine<T> extends AbstractEvolutionEngine<T>
             // Express selected candidates in the population
             List<ExpressedCandidate<T>> offspring = expressPopulation(evolutionScheme.apply(selectedCandidates, rng));
 
-            doExpressedReplacement(expressedPopulation, offspring, eliteCount, rng);
+            doExpressedReplacement(expressedCandidates, offspring, 
+            						eliteCount, rng);
             
-            ExpressedPopulation<T> expressedStats = 
+            ExpressedPopulation<T> newExpressedPopulation = 
             		new ExpressedPopulation<T>(
-            				expressedPopulation,
+            				expressedCandidates,
             				fitnessEvaluator.isNatural(),
-            				expressedPopulation.size(),
+            				expressedCandidates.size(),
             				eliteCount,
             				getCurrentGenerationIndex(),
             				getStartTime());
             
-            notifyPopulationExpressed(expressedPopulation, expressedStats);
+            notifyPopulationExpressed(newExpressedPopulation);
             
-    		return expressedPopulation;
+    		return expressedCandidates;
         } else {
             this.satisfiedTerminationConditions = satisfiedConditions;
-        	return expressedPopulation;
+        	return expressedCandidates;
         }
 	}
 
@@ -238,7 +243,7 @@ public class SteadyStateEvolutionEngine<T> extends AbstractEvolutionEngine<T>
      * space for them.
      * This method randomly chooses which individuals should be replaced, but it can be over-ridden
      * in sub-classes if alternative behaviour is required.
-     * @param existingPopulation The full popultation, sorted in descending order of fitness.
+     * @param existingPopulation The full population, sorted in descending order of fitness.
      * @param newCandidates The (unsorted) newly-created individual(s) that should replace existing members
      * of the population.
      * @param eliteCount The number of the fittest individuals that should be exempt from being replaced.

@@ -102,8 +102,7 @@ public class EvolutionStrategyEngine<T> extends AbstractEvolutionEngine<T>
     @Override
     protected List<EvaluatedCandidate<T>> nextEvolutionStep(List<EvaluatedCandidate<T>> evaluatedPopulation,
                                                             int eliteCount,
-                                                            Random rng)
-    {
+                                                            Random rng)  {
         // Elite count is ignored.  If it's non-zero it doesn't really matter, but if assertions are
         // enabled we will flag it as wrong.
         assert eliteCount == 0 : "Explicit elitism is not supported for an ES, eliteCount should be 0.";
@@ -123,18 +122,18 @@ public class EvolutionStrategyEngine<T> extends AbstractEvolutionEngine<T>
         if (includeExpression()) {
 
             // Express each candidate in the population
-            List<ExpressedCandidate<T>> expressedPopulation = expressPopulation(offspring);
+            List<ExpressedCandidate<T>> expressedCandidates = expressPopulation(offspring);
 
-            ExpressedPopulation<T> expressedStats = 
+            ExpressedPopulation<T> expressedPopulation = 
             		new ExpressedPopulation<T>(
-            				expressedPopulation,
+            				expressedCandidates,
             				fitnessEvaluator.isNatural(),
-            				expressedPopulation.size(),
+            				expressedCandidates.size(),
             				eliteCount,
             				getCurrentGenerationIndex(),
             				getStartTime());
             
-            notifyPopulationExpressed(expressedPopulation, expressedStats);
+            notifyPopulationExpressed(expressedPopulation);
             
             //Calculate the fitness scores for each member of the expressed population.
             evaluatedOffspring = evaluateExpressedPopulation(expressedPopulation);
@@ -155,10 +154,13 @@ public class EvolutionStrategyEngine<T> extends AbstractEvolutionEngine<T>
 
 	@Override
 	protected List<ExpressedCandidate<T>> nextExpressionStep(
-			List<ExpressedCandidate<T>> expressedPopulation, int eliteCount,
-			Random rng) {
+			ExpressedPopulation<T> expressedPopulation, Random rng) {
 
-		List<EvaluatedCandidate<T>> evaluatedPopulation = evaluateExpressedPopulation(expressedPopulation);
+		int eliteCount = expressedPopulation.getEliteCount();
+    	List<ExpressedCandidate<T>> expressedCandidates = expressedPopulation.getExpressedCandidates();
+    	
+		List<EvaluatedCandidate<T>> evaluatedPopulation = 
+				evaluateExpressedPopulation(expressedPopulation);
 
         EvolutionUtils.sortEvaluatedPopulation(evaluatedPopulation, fitnessEvaluator.isNatural());
         PopulationStats<T> stats = EvolutionUtils.getPopulationStats(evaluatedPopulation,
@@ -188,29 +190,30 @@ public class EvolutionStrategyEngine<T> extends AbstractEvolutionEngine<T>
 
         	if (plusSelection) {
         		// Plus-selection means parents are considered for survival as well as offspring.
-                for (ExpressedCandidate<T> c : expressedPopulation) {
+                for (ExpressedCandidate<T> c : expressedCandidates) {
                 	offspring.add(c.getGenome());
                 }
             }
             // Retain the fittest of the candidates that are eligible for survival.
             // Express each candidate in the population
-            List<ExpressedCandidate<T>> newExpressedPopulation = expressPopulation(offspring.subList(0, evaluatedPopulation.size()));
+            List<ExpressedCandidate<T>> newExpressedCandidates = 
+            			expressPopulation(offspring.subList(0, evaluatedPopulation.size()));
 
-            ExpressedPopulation<T> expressedStats = 
+            ExpressedPopulation<T> newExpressedPopulation = 
             		new ExpressedPopulation<T>(
-            				newExpressedPopulation,
+            				newExpressedCandidates,
             				fitnessEvaluator.isNatural(),
-            				newExpressedPopulation.size(),
+            				newExpressedCandidates.size(),
             				eliteCount,
             				getCurrentGenerationIndex(),
             				getStartTime());
             
-            notifyPopulationExpressed(newExpressedPopulation, expressedStats);
+            notifyPopulationExpressed(newExpressedPopulation);
             
-            return newExpressedPopulation;
+            return newExpressedCandidates;
         } else {
             this.satisfiedTerminationConditions = satisfiedConditions;
-        	return expressedPopulation;
+        	return expressedCandidates;
         }
 	}
 

@@ -147,18 +147,18 @@ public class GenerationalEvolutionEngine<T> extends AbstractEvolutionEngine<T>
         if (includeExpression()) {
 
             // Express each candidate in the population
-            List<ExpressedCandidate<T>> expressedPopulation = expressPopulation(population);
+            List<ExpressedCandidate<T>> expressedCandidates = expressPopulation(population);
 
-            ExpressedPopulation<T> expressedStats = 
+            ExpressedPopulation<T> expressedPopulation = 
             		new ExpressedPopulation<T>(
-            				expressedPopulation,
+            				expressedCandidates,
             				fitnessEvaluator.isNatural(),
-            				expressedPopulation.size(),
+            				expressedCandidates.size(),
             				eliteCount,
             				getCurrentGenerationIndex(),
             				getStartTime());
             
-            notifyPopulationExpressed(expressedPopulation, expressedStats);
+            notifyPopulationExpressed(expressedPopulation);
             
             //Calculate the fitness scores for each member of the expressed population.
             return evaluateExpressedPopulation(expressedPopulation);
@@ -171,10 +171,11 @@ public class GenerationalEvolutionEngine<T> extends AbstractEvolutionEngine<T>
 
 	@Override
 	protected List<ExpressedCandidate<T>> nextExpressionStep(
-			List<ExpressedCandidate<T>> expressedPopulation, int eliteCount,
-			Random rng) {
+			ExpressedPopulation<T> expressedPopulation, Random rng) {
 		
-		List<EvaluatedCandidate<T>> evaluatedPopulation = evaluateExpressedPopulation(expressedPopulation);
+		int eliteCount = expressedPopulation.getEliteCount();
+		List<EvaluatedCandidate<T>> evaluatedPopulation = 
+				evaluateExpressedPopulation(expressedPopulation);
 
         EvolutionUtils.sortEvaluatedPopulation(evaluatedPopulation, fitnessEvaluator.isNatural());
         PopulationStats<T> stats = EvolutionUtils.getPopulationStats(evaluatedPopulation,
@@ -211,23 +212,23 @@ public class GenerationalEvolutionEngine<T> extends AbstractEvolutionEngine<T>
             
 
             // Express each candidate in the population
-            List<ExpressedCandidate<T>> newExpressedPopulation = expressPopulation(population);
+            List<ExpressedCandidate<T>> newExpressedCandidates = expressPopulation(population);
 
-            ExpressedPopulation<T> expressedStats = 
+            ExpressedPopulation<T> newExpressedPopulation = 
             		new ExpressedPopulation<T>(
-            				newExpressedPopulation,
+            				newExpressedCandidates,
             				fitnessEvaluator.isNatural(),
-            				newExpressedPopulation.size(),
+            				newExpressedCandidates.size(),
             				eliteCount,
             				getCurrentGenerationIndex(),
             				getStartTime());
             
-            notifyPopulationExpressed(newExpressedPopulation, expressedStats);
+            notifyPopulationExpressed(newExpressedPopulation);
             
-    		return newExpressedPopulation;
+    		return newExpressedCandidates;
         } else {
             this.satisfiedTerminationConditions = satisfiedConditions;
-        	return expressedPopulation;
+        	return expressedPopulation.getExpressedCandidates();
         }
 	}
 }

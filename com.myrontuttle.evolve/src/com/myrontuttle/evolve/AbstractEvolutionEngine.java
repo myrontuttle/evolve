@@ -179,18 +179,18 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
         if (includeExpression()) {
 
             // Express each candidate in the population
-            List<ExpressedCandidate<T>> expressedPopulation = expressPopulation(population);
+            List<ExpressedCandidate<T>> expressedCandidates = expressPopulation(population);
             
-            ExpressedPopulation<T> expressedStats = 
+            ExpressedPopulation<T> expressedPopulation = 
             		new ExpressedPopulation<T>(
-            				expressedPopulation,
+            				expressedCandidates,
             				fitnessEvaluator.isNatural(),
-            				expressedPopulation.size(),
+            				expressedCandidates.size(),
             				eliteCount,
             				currentGenerationIndex,
             				startTime);
             
-            notifyPopulationExpressed(expressedPopulation, expressedStats);
+            notifyPopulationExpressed(expressedPopulation);
             
             //Calculate the fitness scores for each member of the expressed population.
             evaluatedPopulation = evaluateExpressedPopulation(expressedPopulation);
@@ -252,27 +252,27 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
     		 List<T> population = candidateFactory.generateInitialPopulation(populationSize,
     	                                                                        rng);
     		 // Express each candidate in the population
-             List<ExpressedCandidate<T>> expressedPopulation = expressPopulation(population);
+             List<ExpressedCandidate<T>> expressedCandidates = expressPopulation(population);
              
-             ExpressedPopulation<T> expressedStats = 
+             ExpressedPopulation<T> expressedPopulation = 
              		new ExpressedPopulation<T>(
-             				expressedPopulation,
+             				expressedCandidates,
              				fitnessEvaluator.isNatural(),
-             				expressedPopulation.size(),
+             				expressedCandidates.size(),
              				eliteCount,
              				currentGenerationIndex,
              				startTime);
              
-             notifyPopulationExpressed(expressedPopulation, expressedStats);
+             notifyPopulationExpressed(expressedPopulation);
              
-             return expressedPopulation;
+             return expressedCandidates;
     	} else {
 
     		this.terminationConditions = conditions;
 
         	++currentGenerationIndex;
 
-            return nextExpressionStep(pop.getExpressedCandidates(), pop.getEliteCount(), rng);
+            return nextExpressionStep(pop, rng);
     	}
     }
 
@@ -309,8 +309,7 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
      * @return The updated population after the evolutionary process has proceeded
      * by one step/iteration.
      */
-    protected abstract List<ExpressedCandidate<T>> nextExpressionStep(List<ExpressedCandidate<T>> expressedPopulation,
-                                                                     int eliteCount,
+    protected abstract List<ExpressedCandidate<T>> nextExpressionStep(ExpressedPopulation<T> expressedPopulation,
                                                                      Random rng);
 
     /**
@@ -414,24 +413,25 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
      * @return The evaluated population (a list of candidates with attached fitness
      * scores).
      */
-    protected List<EvaluatedCandidate<T>> evaluateExpressedPopulation(List<ExpressedCandidate<T>> population) {
-        List<EvaluatedCandidate<T>> evaluatedPopulation = new ArrayList<EvaluatedCandidate<T>>(population.size());
+    protected List<EvaluatedCandidate<T>> evaluateExpressedPopulation(ExpressedPopulation<T> population) {
+    	List<ExpressedCandidate<T>> candidates = population.getExpressedCandidates();
+        List<EvaluatedCandidate<T>> evaluatedPopulation = new ArrayList<EvaluatedCandidate<T>>(candidates.size());
 
         if (singleThreaded)  {
         	// Do fitness evaluations on the request thread.
-            for (ExpressedCandidate<T> candidate : population) {
+            for (ExpressedCandidate<T> candidate : candidates) {
                 evaluatedPopulation.add(new EvaluatedCandidate<T>(candidate,
-                            expressedFitnessEvaluator.getFitness(candidate, population)));
+                            expressedFitnessEvaluator.getFitness(candidate, candidates)));
             }
         } else {
             // Divide the required number of fitness evaluations equally among the
             // available processors and coordinate the threads so that we do not
             // proceed until all threads have finished processing.
             try {
-                List<ExpressedCandidate<T>> unmodifiablePopulation = Collections.unmodifiableList(population);
-                List<Future<EvaluatedCandidate<T>>> results = new ArrayList<Future<EvaluatedCandidate<T>>>(population.size());
+                List<ExpressedCandidate<T>> unmodifiablePopulation = Collections.unmodifiableList(candidates);
+                List<Future<EvaluatedCandidate<T>>> results = new ArrayList<Future<EvaluatedCandidate<T>>>(candidates.size());
                 // Submit tasks for execution and wait until all threads have finished fitness evaluations.
-                for (ExpressedCandidate<T> candidate : population) {
+                for (ExpressedCandidate<T> candidate : candidates) {
                     results.add(getSharedWorker().submit(new ExpressedFitnessEvalutationTask<T>(expressedFitnessEvaluator,
                                                                                        candidate,
                                                                                        unmodifiablePopulation)));
@@ -525,9 +525,8 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
      * Send the expressed population to the Expression Strategy for extra processing
      * @param stats Information about the current state of the population.
      */
-    protected void notifyPopulationExpressed(List<ExpressedCandidate<T>> expressedPopulation,
-    											ExpressedPopulation<T> stats) {
-        expressionStrategy.populationExpressed(expressedPopulation, stats);
+    protected void notifyPopulationExpressed(ExpressedPopulation<T> expressedPopulation) {
+        expressionStrategy.populationExpressed(expressedPopulation);
     }
 
     /**
