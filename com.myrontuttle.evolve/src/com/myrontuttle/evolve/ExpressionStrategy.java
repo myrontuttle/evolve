@@ -21,10 +21,8 @@ public interface ExpressionStrategy<T>
     void populationExpressed(ExpressedPopulation<T> expressedPopulation);
     
     /**
-     * Imports a population from a file of expressed candidates to be 
-     * evaluated and evolved
-     * @param Location of the population file
+     * Imports a population of expressed candidates to be evaluated and evolved
      * @return The expressed population
      */
-    ExpressedPopulation<int[]> importPopulation(String fileName);
+    ExpressedPopulation<int[]> importPopulation();
 }
