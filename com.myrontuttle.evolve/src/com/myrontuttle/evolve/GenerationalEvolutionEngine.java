@@ -170,7 +170,7 @@ public class GenerationalEvolutionEngine<T> extends AbstractEvolutionEngine<T>
     }
 
 	@Override
-	protected List<ExpressedCandidate<T>> nextExpressionStep(
+	protected ExpressedPopulation<T> nextExpressionStep(
 			ExpressedPopulation<T> expressedPopulation, Random rng) {
 		
 		int eliteCount = expressedPopulation.getEliteCount();
@@ -225,10 +225,10 @@ public class GenerationalEvolutionEngine<T> extends AbstractEvolutionEngine<T>
             
             notifyPopulationExpressed(newExpressedPopulation);
             
-    		return newExpressedCandidates;
+    		return newExpressedPopulation;
         } else {
             this.satisfiedTerminationConditions = satisfiedConditions;
-        	return expressedPopulation.getExpressedCandidates();
+        	return expressedPopulation;
         }
 	}
 }

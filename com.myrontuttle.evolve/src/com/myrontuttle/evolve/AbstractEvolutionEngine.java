@@ -231,7 +231,7 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
     /**
      * {@inheritDoc}
      */
-    public List<ExpressedCandidate<T>> evolveToExpression(
+    public ExpressedPopulation<T> evolveToExpression(
     										ExpressedPopulation<T> pop,
     										int populationSize,
     										int eliteCount,
@@ -265,7 +265,7 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
              
              notifyPopulationExpressed(expressedPopulation);
              
-             return expressedCandidates;
+             return expressedPopulation;
     	} else {
 
     		this.terminationConditions = conditions;
@@ -309,7 +309,7 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
      * @return The updated population after the evolutionary process has proceeded
      * by one step/iteration.
      */
-    protected abstract List<ExpressedCandidate<T>> nextExpressionStep(ExpressedPopulation<T> expressedPopulation,
+    protected abstract ExpressedPopulation<T> nextExpressionStep(ExpressedPopulation<T> expressedPopulation,
                                                                      Random rng);
 
     /**

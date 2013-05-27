@@ -134,9 +134,9 @@ public interface EvolutionEngine<T>
      * This value must be non-negative and less than the population size.  A value of zero
      * means that no elitism will be applied.
      * @param conditions One or more conditions that may cause the evolution to terminate.
-     * @return The fittest solution found by the evolutionary process.
+     * @return The population after it has been expressed.
      */
-    public List<ExpressedCandidate<T>> evolveToExpression(
+    public ExpressedPopulation<T> evolveToExpression(
     										ExpressedPopulation<T> pop,
     										int populationSize,
     										int eliteCount,
