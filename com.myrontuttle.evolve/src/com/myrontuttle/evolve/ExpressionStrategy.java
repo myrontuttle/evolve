@@ -22,7 +22,8 @@ public interface ExpressionStrategy<T>
     
     /**
      * Imports a population of expressed candidates to be evaluated and evolved
+     * @param populationId indicates which population to import
      * @return The expressed population
      */
-    ExpressedPopulation<int[]> importPopulation();
+    ExpressedPopulation<int[]> importPopulation(String populationId);
 }
