@@ -122,7 +122,8 @@ public class EvolutionStrategyEngine<T> extends AbstractEvolutionEngine<T>
         if (includeExpression()) {
 
             // Express each candidate in the population
-            List<ExpressedCandidate<T>> expressedCandidates = expressPopulation(offspring);
+            List<ExpressedCandidate<T>> expressedCandidates = 
+            					expressPopulation(offspring, null);
 
             ExpressedPopulation<T> expressedPopulation = 
             		new ExpressedPopulation<T>(
@@ -154,7 +155,7 @@ public class EvolutionStrategyEngine<T> extends AbstractEvolutionEngine<T>
 
 	@Override
 	protected ExpressedPopulation<T> nextExpressionStep(
-			ExpressedPopulation<T> expressedPopulation, Random rng) {
+			ExpressedPopulation<T> expressedPopulation, String populationId, Random rng) {
 
 		int eliteCount = expressedPopulation.getEliteCount();
     	List<ExpressedCandidate<T>> expressedCandidates = expressedPopulation.getExpressedCandidates();
@@ -197,7 +198,8 @@ public class EvolutionStrategyEngine<T> extends AbstractEvolutionEngine<T>
             // Retain the fittest of the candidates that are eligible for survival.
             // Express each candidate in the population
             List<ExpressedCandidate<T>> newExpressedCandidates = 
-            			expressPopulation(offspring.subList(0, evaluatedPopulation.size()));
+            			expressPopulation(offspring.subList(0, evaluatedPopulation.size()), 
+            								populationId);
 
             ExpressedPopulation<T> newExpressedPopulation = 
             		new ExpressedPopulation<T>(

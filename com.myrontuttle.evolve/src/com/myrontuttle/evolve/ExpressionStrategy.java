@@ -10,20 +10,14 @@ public interface ExpressionStrategy<T>
     /**
      * <p>Express a candidate.</p>
      * @param <T> The candidate that we are expressing.
+     * @param populationId The population this candidate belongs to
      * @return The expressed candidate.
      */
-    ExpressedCandidate<T> express(T candidate);
+    ExpressedCandidate<T> express(T candidate, String populationId);
     
     /**
      * Invoked after the entire population has been expressed
      * @param expressedPopulation The list of expressed candidates
      */
     void populationExpressed(ExpressedPopulation<T> expressedPopulation);
-    
-    /**
-     * Imports a population of expressed candidates to be evaluated and evolved
-     * @param populationId indicates which population to import
-     * @return The expressed population
-     */
-    ExpressedPopulation<int[]> importPopulation(String populationId);
 }

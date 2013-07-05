@@ -179,7 +179,7 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
         if (includeExpression()) {
 
             // Express each candidate in the population
-            List<ExpressedCandidate<T>> expressedCandidates = expressPopulation(population);
+            List<ExpressedCandidate<T>> expressedCandidates = expressPopulation(population, null);
             
             ExpressedPopulation<T> expressedPopulation = 
             		new ExpressedPopulation<T>(
@@ -233,6 +233,7 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
      */
     public ExpressedPopulation<T> evolveToExpression(
     										ExpressedPopulation<T> pop,
+    										String populationId,
     										int populationSize,
     										int eliteCount,
             								TerminationCondition... conditions) {
@@ -252,7 +253,8 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
     		 List<T> population = candidateFactory.generateInitialPopulation(populationSize,
     	                                                                        rng);
     		 // Express each candidate in the population
-             List<ExpressedCandidate<T>> expressedCandidates = expressPopulation(population);
+             List<ExpressedCandidate<T>> expressedCandidates = 
+            		 		expressPopulation(population, populationId);
              
              ExpressedPopulation<T> expressedPopulation = 
              		new ExpressedPopulation<T>(
@@ -272,7 +274,7 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
 
         	++currentGenerationIndex;
 
-            return nextExpressionStep(pop, rng);
+            return nextExpressionStep(pop, populationId, rng);
     	}
     }
 
@@ -304,12 +306,13 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
      * This method performs a single step/iteration of the evolutionary process up to
      * the expression of the candidates.
      * @param expressedPopulation The population at the beginning of the process.
-     * @param eliteCount The number of the fittest individuals that must be preserved.
+     * @param populationId Identifier for this population
      * @param rng A source of randomness.
      * @return The updated population after the evolutionary process has proceeded
      * by one step/iteration.
      */
     protected abstract ExpressedPopulation<T> nextExpressionStep(ExpressedPopulation<T> expressedPopulation,
+    																String populationId,
                                                                      Random rng);
 
     /**
@@ -317,14 +320,15 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
      * @param population The population to express
      * @return The expressed population
      */
-    protected List<ExpressedCandidate<T>> expressPopulation(List<T> population) {
+    protected List<ExpressedCandidate<T>> expressPopulation(List<T> population, 
+    														String populationId) {
         List<ExpressedCandidate<T>> expressedPopulation = 
         		new ArrayList<ExpressedCandidate<T>>(population.size());
 
         if (singleThreaded) {
         	// Do fitness evaluations on the request thread.
             for (T candidate : population) {
-            	expressedPopulation.add(expressionStrategy.express(candidate));
+            	expressedPopulation.add(expressionStrategy.express(candidate, populationId));
             }
         } else {
             // Divide the required number of expressions equally among the
@@ -339,7 +343,7 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
                     results.add(
                     	getSharedExpressionWorker().submit(
                     		new ExpressionTask<T>(expressionStrategy,
-                                                  candidate)));
+                                                  candidate, populationId)));
                 }
                 for (Future<ExpressedCandidate<T>> result : results) {
                     expressedPopulation.add(result.get());

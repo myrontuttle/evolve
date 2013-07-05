@@ -125,6 +125,7 @@ public interface EvolutionEngine<T>
      * candidates.
      * @param pop A population of expressed candidates to be evolved until they're expressed
      * again.
+     * @param populationId Identifier for this population
      * @param populationSize The number of candidate solutions present in the population
      * at any point in time.
      * @param eliteCount The number of candidates preserved via elitism.  In elitism, a
@@ -138,6 +139,7 @@ public interface EvolutionEngine<T>
      */
     public ExpressedPopulation<T> evolveToExpression(
     										ExpressedPopulation<T> pop,
+    										String populationId,
     										int populationSize,
     										int eliteCount,
             								TerminationCondition... conditions);

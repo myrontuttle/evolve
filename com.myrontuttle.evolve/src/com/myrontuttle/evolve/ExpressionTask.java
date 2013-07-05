@@ -11,6 +11,7 @@ class ExpressionTask<T> implements Callable<ExpressedCandidate<T>>
 {
     private final ExpressionStrategy<T> expressionStrategy;
     private final T candidate;
+    private final String populationId;
 
     /**
      * Creates a task for performing expressions.
@@ -21,12 +22,14 @@ class ExpressionTask<T> implements Callable<ExpressedCandidate<T>>
      * not being evaluated by this task.
      */
     ExpressionTask(ExpressionStrategy<T> expressionStrategy,
-                           T candidate) {
+                           T candidate,
+                           String populationId) {
         this.expressionStrategy = expressionStrategy;
         this.candidate = candidate;
+        this.populationId = populationId;
     }
 
     public ExpressedCandidate<T> call() {
-        return expressionStrategy.express(candidate);
+        return expressionStrategy.express(candidate, populationId);
     }
 }

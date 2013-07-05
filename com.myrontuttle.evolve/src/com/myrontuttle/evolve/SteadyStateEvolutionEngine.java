@@ -121,7 +121,7 @@ public class SteadyStateEvolutionEngine<T> extends AbstractEvolutionEngine<T>
 
             // Express selected candidates in the population
             List<ExpressedCandidate<T>> expressedCandidates = 
-            		expressPopulation(evolutionScheme.apply(selectedCandidates, rng));
+            		expressPopulation(evolutionScheme.apply(selectedCandidates, rng), null);
 
             ExpressedPopulation<T> expressedPopulation = 
             		new ExpressedPopulation<T>(
@@ -187,7 +187,7 @@ public class SteadyStateEvolutionEngine<T> extends AbstractEvolutionEngine<T>
 
 	@Override
 	protected ExpressedPopulation<T> nextExpressionStep(
-			ExpressedPopulation<T> expressedPopulation, Random rng) {
+			ExpressedPopulation<T> expressedPopulation, String populationId, Random rng) {
 
 		int eliteCount = expressedPopulation.getEliteCount();
     	List<ExpressedCandidate<T>> expressedCandidates = expressedPopulation.getExpressedCandidates();
@@ -215,7 +215,9 @@ public class SteadyStateEvolutionEngine<T> extends AbstractEvolutionEngine<T>
                                                                   rng);
             
             // Express selected candidates in the population
-            List<ExpressedCandidate<T>> offspring = expressPopulation(evolutionScheme.apply(selectedCandidates, rng));
+            List<ExpressedCandidate<T>> offspring = 
+            		expressPopulation(evolutionScheme.apply(selectedCandidates, rng), 
+            							populationId);
 
             doExpressedReplacement(expressedCandidates, offspring, 
             						eliteCount, rng);

@@ -147,7 +147,8 @@ public class GenerationalEvolutionEngine<T> extends AbstractEvolutionEngine<T>
         if (includeExpression()) {
 
             // Express each candidate in the population
-            List<ExpressedCandidate<T>> expressedCandidates = expressPopulation(population);
+            List<ExpressedCandidate<T>> expressedCandidates = 
+            					expressPopulation(population, null);
 
             ExpressedPopulation<T> expressedPopulation = 
             		new ExpressedPopulation<T>(
@@ -171,7 +172,8 @@ public class GenerationalEvolutionEngine<T> extends AbstractEvolutionEngine<T>
 
 	@Override
 	protected ExpressedPopulation<T> nextExpressionStep(
-			ExpressedPopulation<T> expressedPopulation, Random rng) {
+			ExpressedPopulation<T> expressedPopulation, 
+			String populationId, Random rng) {
 		
 		int eliteCount = expressedPopulation.getEliteCount();
 		List<EvaluatedCandidate<T>> evaluatedPopulation = 
@@ -195,8 +197,7 @@ public class GenerationalEvolutionEngine<T> extends AbstractEvolutionEngine<T>
             // First perform any elitist selection.
             List<T> elite = new ArrayList<T>(eliteCount);
             Iterator<EvaluatedCandidate<T>> iterator = evaluatedPopulation.iterator();
-            while (elite.size() < eliteCount)
-            {
+            while (elite.size() < eliteCount) {
                 elite.add(iterator.next().getCandidate());
             }
             // Then select candidates that will be operated on to create the evolved
@@ -212,7 +213,8 @@ public class GenerationalEvolutionEngine<T> extends AbstractEvolutionEngine<T>
             
 
             // Express each candidate in the population
-            List<ExpressedCandidate<T>> newExpressedCandidates = expressPopulation(population);
+            List<ExpressedCandidate<T>> newExpressedCandidates = 
+            					expressPopulation(population, populationId);
 
             ExpressedPopulation<T> newExpressedPopulation = 
             		new ExpressedPopulation<T>(
