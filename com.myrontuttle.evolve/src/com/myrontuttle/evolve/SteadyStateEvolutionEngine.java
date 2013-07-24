@@ -123,19 +123,10 @@ public class SteadyStateEvolutionEngine<T> extends AbstractEvolutionEngine<T>
             List<ExpressedCandidate<T>> expressedCandidates = 
             		expressPopulation(evolutionScheme.apply(selectedCandidates, rng), null);
 
-            ExpressedPopulation<T> expressedPopulation = 
-            		new ExpressedPopulation<T>(
-            				expressedCandidates,
-            				fitnessEvaluator.isNatural(),
-            				expressedCandidates.size(),
-            				eliteCount,
-            				getCurrentGenerationIndex(),
-            				getStartTime());
-            
-            notifyPopulationExpressed(expressedPopulation);
+            notifyPopulationExpressed(expressedCandidates);
             
             //Calculate the fitness scores for each member of the expressed population.
-            offspring = evaluateExpressedPopulation(expressedPopulation);
+            offspring = evaluateExpressedPopulation(expressedCandidates);
         } else {
 
             //Calculate the fitness scores for the selected candidates.
@@ -186,14 +177,13 @@ public class SteadyStateEvolutionEngine<T> extends AbstractEvolutionEngine<T>
     }
 
 	@Override
-	protected ExpressedPopulation<T> nextExpressionStep(
-			ExpressedPopulation<T> expressedPopulation, String populationId, Random rng) {
+	protected List<ExpressedCandidate<T>> nextExpressionStep(
+			List<ExpressedCandidate<T>> candidates, 
+			int eliteCount,
+			String populationId, Random rng) {
 
-		int eliteCount = expressedPopulation.getEliteCount();
-    	List<ExpressedCandidate<T>> expressedCandidates = expressedPopulation.getExpressedCandidates();
-    	
 		List<EvaluatedCandidate<T>> evaluatedPopulation = 
-				evaluateExpressedPopulation(expressedPopulation);
+				evaluateExpressedPopulation(candidates);
     	
         EvolutionUtils.sortEvaluatedPopulation(evaluatedPopulation, fitnessEvaluator.isNatural());
         PopulationStats<T> stats = EvolutionUtils.getPopulationStats(evaluatedPopulation,
@@ -219,24 +209,15 @@ public class SteadyStateEvolutionEngine<T> extends AbstractEvolutionEngine<T>
             		expressPopulation(evolutionScheme.apply(selectedCandidates, rng), 
             							populationId);
 
-            doExpressedReplacement(expressedCandidates, offspring, 
+            doExpressedReplacement(candidates, offspring, 
             						eliteCount, rng);
             
-            ExpressedPopulation<T> newExpressedPopulation = 
-            		new ExpressedPopulation<T>(
-            				expressedCandidates,
-            				fitnessEvaluator.isNatural(),
-            				expressedCandidates.size(),
-            				eliteCount,
-            				getCurrentGenerationIndex(),
-            				getStartTime());
+            notifyPopulationExpressed(candidates);
             
-            notifyPopulationExpressed(newExpressedPopulation);
-            
-    		return newExpressedPopulation;
+    		return candidates;
         } else {
             this.satisfiedTerminationConditions = satisfiedConditions;
-        	return expressedPopulation;
+        	return candidates;
         }
 	}
 

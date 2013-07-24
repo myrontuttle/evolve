@@ -123,8 +123,8 @@ public interface EvolutionEngine<T>
     /**
      * Evolves an existing list of expressed candidates to the next expression of
      * candidates.
-     * @param pop A population of expressed candidates to be evolved until they're expressed
-     * again.
+     * @param candidates A population of expressed candidates to be evolved until they're 
+     * expressed again.
      * @param populationId Identifier for this population
      * @param populationSize The number of candidate solutions present in the population
      * at any point in time.
@@ -135,10 +135,10 @@ public interface EvolutionEngine<T>
      * This value must be non-negative and less than the population size.  A value of zero
      * means that no elitism will be applied.
      * @param conditions One or more conditions that may cause the evolution to terminate.
-     * @return The population after it has been expressed.
+     * @return The list of candidates after it has been expressed.
      */
-    public ExpressedPopulation<T> evolveToExpression(
-    										ExpressedPopulation<T> pop,
+    public List<ExpressedCandidate<T>> evolveToExpression(
+    										List<ExpressedCandidate<T>> candidates,
     										String populationId,
     										int populationSize,
     										int eliteCount,

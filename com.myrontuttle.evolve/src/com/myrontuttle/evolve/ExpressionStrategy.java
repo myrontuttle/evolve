@@ -1,5 +1,7 @@
 package com.myrontuttle.evolve;
 
+import java.util.List;
+
 /**
  * Strategy interface for candidate expression.
  * @param <T> The type of evolved entity that we are expressing.
@@ -19,5 +21,5 @@ public interface ExpressionStrategy<T>
      * Invoked after the entire population has been expressed
      * @param expressedPopulation The list of expressed candidates
      */
-    void populationExpressed(ExpressedPopulation<T> expressedPopulation);
+    void candidatesExpressed(List<ExpressedCandidate<T>> expressedCandidates);
 }
