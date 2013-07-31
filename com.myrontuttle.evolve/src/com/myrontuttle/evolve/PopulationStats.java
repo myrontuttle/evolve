@@ -74,7 +74,12 @@ public final class PopulationStats<T> {
     }
 
 
-    /**
+    public String getPopulationId() {
+		return populationId;
+	}
+
+
+	/**
      * @return The fittest candidate present in the population.
      * @see #getBestCandidateFitness()
      */
