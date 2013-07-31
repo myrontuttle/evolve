@@ -30,9 +30,9 @@ public class ElapsedTimeTest
     public void testElapsedTimes()
     {
         TerminationCondition condition = new ElapsedTime(1000);
-        PopulationStats<Object> data = new PopulationStats<Object>(new Object(), 0, 0, 0, true, 2, 0, 0, 100);
+        PopulationStats<Object> data = new PopulationStats<Object>(null, new Object(), 0, 0, 0, true, 2, 0, 0, 100);
         assert !condition.shouldTerminate(data) : "Should not terminate before timeout.";
-        data = new PopulationStats<Object>(new Object(), 0, 0, 0, true, 2, 0, 0, 1000);
+        data = new PopulationStats<Object>(null, new Object(), 0, 0, 0, true, 2, 0, 0, 1000);
         assert condition.shouldTerminate(data) : "Should terminate after timeout.";
     }
 

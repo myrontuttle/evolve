@@ -67,7 +67,7 @@ public class IslandEvolutionTest
                 observedGenerationCounts[islandIndex]++;
             }
         });
-        islandEvolution.evolve(5, 0, 5, 0, new GenerationCount(2));
+        islandEvolution.evolve(null, 5, 0, 5, 0, new GenerationCount(2));
         assert observedEpochCount[0] == 2 : "Listener should have been notified twice, was " + observedEpochCount[0];
         for (int i = 0; i < islandCount; i++)
         {
@@ -104,7 +104,7 @@ public class IslandEvolutionTest
             public void islandPopulationUpdate(int islandIndex, PopulationStats<? extends Integer> PopulationStats){}
         });
         long startTime = System.currentTimeMillis();
-        islandEvolution.evolve(10, 0, 10, 0, new ElapsedTime(timeout));
+        islandEvolution.evolve(null, 10, 0, 10, 0, new ElapsedTime(timeout));
         long elapsedTime = System.currentTimeMillis() - startTime;
         assert Thread.interrupted() : "Thread was not interrupted before timeout.";
         assert elapsedTime < timeout : "Engine did not respond to interrupt before timeout.";

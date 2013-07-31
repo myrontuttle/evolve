@@ -30,9 +30,9 @@ public class TargetFitnessTest
     public void testNaturalFitness()
     {
         TerminationCondition condition = new TargetFitness(10.0d, true);
-        PopulationStats<Object> data = new PopulationStats<Object>(new Object(), 5.0d, 4.0d, 0, true, 2, 0, 0, 100);
+        PopulationStats<Object> data = new PopulationStats<Object>(null, new Object(), 5.0d, 4.0d, 0, true, 2, 0, 0, 100);
         assert !condition.shouldTerminate(data) : "Should not terminate before target fitness is reached.";
-        data = new PopulationStats<Object>(new Object(), 10.0d, 8.0d, 0, true, 2, 0, 0, 100);
+        data = new PopulationStats<Object>(null, new Object(), 10.0d, 8.0d, 0, true, 2, 0, 0, 100);
         assert condition.shouldTerminate(data) : "Should terminate once target fitness is reached.";
     }
 
@@ -41,9 +41,9 @@ public class TargetFitnessTest
     public void testNonNaturalFitness()
     {
         TerminationCondition condition = new TargetFitness(1.0d, false);
-        PopulationStats<Object> data = new PopulationStats<Object>(new Object(), 5.0d, 4.0d, 0, true, 2, 0, 0, 100);
+        PopulationStats<Object> data = new PopulationStats<Object>(null, new Object(), 5.0d, 4.0d, 0, true, 2, 0, 0, 100);
         assert !condition.shouldTerminate(data) : "Should not terminate before target fitness is reached.";
-        data = new PopulationStats<Object>(new Object(), 1.0d, 3.1d, 0, true, 2, 0, 0, 100);
+        data = new PopulationStats<Object>(null, new Object(), 1.0d, 3.1d, 0, true, 2, 0, 0, 100);
         assert condition.shouldTerminate(data) : "Should terminate once target fitness is reached.";
     }
 }

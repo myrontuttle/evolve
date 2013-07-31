@@ -100,7 +100,8 @@ public class EvolutionStrategyEngine<T> extends AbstractEvolutionEngine<T>
      * @return The updated population after the evolution strategy has advanced.
      */
     @Override
-    protected List<EvaluatedCandidate<T>> nextEvolutionStep(List<EvaluatedCandidate<T>> evaluatedPopulation,
+    protected List<EvaluatedCandidate<T>> nextEvolutionStep(String populationId,
+    														List<EvaluatedCandidate<T>> evaluatedPopulation,
                                                             int eliteCount,
                                                             Random rng)  {
         // Elite count is ignored.  If it's non-zero it doesn't really matter, but if assertions are
@@ -154,7 +155,8 @@ public class EvolutionStrategyEngine<T> extends AbstractEvolutionEngine<T>
 				evaluateExpressedPopulation(candidates);
 
         EvolutionUtils.sortEvaluatedPopulation(evaluatedPopulation, fitnessEvaluator.isNatural());
-        PopulationStats<T> stats = EvolutionUtils.getPopulationStats(evaluatedPopulation,
+        PopulationStats<T> stats = EvolutionUtils.getPopulationStats(populationId,
+        										  evaluatedPopulation,
                                                   fitnessEvaluator.isNatural(),
                                                   eliteCount,
                                                   getCurrentGenerationIndex(),

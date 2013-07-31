@@ -47,7 +47,7 @@ public class SteadyStateEvolutionEngineTest
                                                                      new EvaluatedCandidate<Integer>(1, 0),
                                                                      new EvaluatedCandidate<Integer>(1, 0),
                                                                      new EvaluatedCandidate<Integer>(1, 0));
-        List<EvaluatedCandidate<Integer>> evaluatedPopulation = steadyState.nextEvolutionStep(population,
+        List<EvaluatedCandidate<Integer>> evaluatedPopulation = steadyState.nextEvolutionStep(null, population,
                                                                                               0,
                                                                                               FrameworkTestUtils.getRNG());
         assert evaluatedPopulation.size() == 5 : "Population size should be unchanged.";
@@ -83,7 +83,7 @@ public class SteadyStateEvolutionEngineTest
                                                                      new EvaluatedCandidate<Integer>(1, 0),
                                                                      new EvaluatedCandidate<Integer>(1, 0),
                                                                      new EvaluatedCandidate<Integer>(1, 0));
-        List<EvaluatedCandidate<Integer>> evaluatedPopulation = steadyState.nextEvolutionStep(population,
+        List<EvaluatedCandidate<Integer>> evaluatedPopulation = steadyState.nextEvolutionStep(null, population,
                                                                                               0,
                                                                                               FrameworkTestUtils.getRNG());
         assert evaluatedPopulation.size() == 5 : "Population size should be unchanged.";
@@ -119,7 +119,7 @@ public class SteadyStateEvolutionEngineTest
         // The fittest candidate should always be preserved.
         for (int i = 0; i < 20; i++) // Once is not enough to be confident.
         {
-            List<EvaluatedCandidate<Integer>> evaluatedPopulation = steadyState.nextEvolutionStep(population,
+            List<EvaluatedCandidate<Integer>> evaluatedPopulation = steadyState.nextEvolutionStep(null, population,
                                                                                                   1,
                                                                                                   FrameworkTestUtils.getRNG());
             assert evaluatedPopulation.size() == 5 : "Population size should be unchanged.";

@@ -78,18 +78,18 @@ public class EvolutionUtils {
      * @param <T> The type of entity that is being evolved.
      * @return Statistics about the current generation of evolved individuals.
      */
-    public static <T> PopulationStats<T> getPopulationStats(List<EvaluatedCandidate<T>> evaluatedPopulation,
-                                                          boolean naturalFitness,
-                                                          int eliteCount,
-                                                          int iterationNumber,
-                                                          long startTime)
-    {
+    public static <T> PopulationStats<T> getPopulationStats(String populationId,
+    							List<EvaluatedCandidate<T>> evaluatedPopulation,
+                                boolean naturalFitness,
+                                int eliteCount,
+                                int iterationNumber,
+                                long startTime)  {
         DataSet stats = new DataSet(evaluatedPopulation.size());
-        for (EvaluatedCandidate<T> candidate : evaluatedPopulation)
-        {
+        for (EvaluatedCandidate<T> candidate : evaluatedPopulation) {
             stats.addValue(candidate.getFitness());
         }
-        return new PopulationStats<T>(evaluatedPopulation.get(0).getCandidate(),
+        return new PopulationStats<T>(populationId,
+        							 evaluatedPopulation.get(0).getCandidate(),
                                      evaluatedPopulation.get(0).getFitness(),
                                      stats.getArithmeticMean(),
                                      stats.getStandardDeviation(),

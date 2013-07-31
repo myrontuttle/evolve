@@ -25,6 +25,7 @@ package com.myrontuttle.evolve;
  * @author Daniel Dyer
  */
 public final class PopulationStats<T> {
+	private final String populationId;
     private final T bestCandidate;
     private final double bestCandidateFitness;
     private final double meanFitness;
@@ -49,7 +50,8 @@ public final class PopulationStats<T> {
      * @param generationNumber The (zero-based) number of the last generation
      * that was processed.
      */
-    public PopulationStats(T bestCandidate,
+    public PopulationStats(String populationId,
+    					  T bestCandidate,
                           double bestCandidateFitness,
                           double meanFitness,
                           double fitnessStandardDeviation,
@@ -59,6 +61,7 @@ public final class PopulationStats<T> {
                           int generationNumber,
                           long elapsedTime)
     {
+    	this.populationId = populationId;
         this.bestCandidate = bestCandidate;
         this.bestCandidateFitness = bestCandidateFitness;
         this.meanFitness = meanFitness;

@@ -116,10 +116,12 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
     /**
      * {@inheritDoc}
      */
-    public T evolve(int populationSize,
+    public T evolve(String populationId,
+    				int populationSize,
                     int eliteCount,
                     TerminationCondition... conditions) {
-        return evolve(populationSize,
+        return evolve(populationId,
+        			  populationSize,
                       eliteCount,
                       Collections.<T>emptySet(),
                       conditions);
@@ -129,12 +131,14 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
     /**
      * {@inheritDoc}
      */
-    public T evolve(int populationSize,
+    public T evolve(String populationId,
+    			 	int populationSize,
                     int eliteCount,
                     Collection<T> seedCandidates,
                     TerminationCondition... conditions)
     {
-        return evolvePopulation(populationSize,
+        return evolvePopulation(populationId,
+        						populationSize,
                                 eliteCount,
                                 seedCandidates,
                                 conditions).get(0).getCandidate();
@@ -143,11 +147,13 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
     /**
      * {@inheritDoc}
      */
-    public List<EvaluatedCandidate<T>> evolvePopulation(int populationSize,
+    public List<EvaluatedCandidate<T>> evolvePopulation(String populationId,
+    													int populationSize,
                                                         int eliteCount,
                                                         TerminationCondition... conditions)
     {
-        return evolvePopulation(populationSize,
+        return evolvePopulation(populationId,
+        						populationSize,
                                 eliteCount,
                                 Collections.<T>emptySet(),
                                 conditions);
@@ -156,7 +162,8 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
     /**
      * {@inheritDoc}
      */
-    public List<EvaluatedCandidate<T>> evolvePopulation(int populationSize,
+    public List<EvaluatedCandidate<T>> evolvePopulation(String populationId,
+    													int populationSize,
                                                         int eliteCount,
                                                         Collection<T> seedCandidates,
                                                         TerminationCondition... conditions) {
@@ -179,7 +186,7 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
         if (includeExpression()) {
 
             // Express each candidate in the population
-            List<ExpressedCandidate<T>> expressedCandidates = expressPopulation(population, null);
+            List<ExpressedCandidate<T>> expressedCandidates = expressPopulation(population, populationId);
             
             notifyPopulationExpressed(expressedCandidates);
             
@@ -191,7 +198,8 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
         	evaluatedPopulation = evaluatePopulation(population);
         }
         EvolutionUtils.sortEvaluatedPopulation(evaluatedPopulation, fitnessEvaluator.isNatural());
-        PopulationStats<T> stats = EvolutionUtils.getPopulationStats(evaluatedPopulation,
+        PopulationStats<T> stats = EvolutionUtils.getPopulationStats(populationId,
+        										  evaluatedPopulation,
                                                   fitnessEvaluator.isNatural(),
                                                   eliteCount,
                                                   currentGenerationIndex,
@@ -204,9 +212,11 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
         while (satisfiedConditions == null)
         {
             ++currentGenerationIndex;
-            evaluatedPopulation = nextEvolutionStep(evaluatedPopulation, eliteCount, rng);
+            evaluatedPopulation = nextEvolutionStep(populationId, evaluatedPopulation, 
+            										eliteCount, rng);
             EvolutionUtils.sortEvaluatedPopulation(evaluatedPopulation, fitnessEvaluator.isNatural());
-            stats = EvolutionUtils.getPopulationStats(evaluatedPopulation,
+            stats = EvolutionUtils.getPopulationStats(populationId,
+            										evaluatedPopulation,
                                                     fitnessEvaluator.isNatural(),
                                                     eliteCount,
                                                     currentGenerationIndex,
@@ -274,13 +284,15 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
     
     /**
      * This method performs a single step/iteration of the evolutionary process.
+     * @param populationId An identifier for which population to evolve
      * @param evaluatedPopulation The population at the beginning of the process.
      * @param eliteCount The number of the fittest individuals that must be preserved.
      * @param rng A source of randomness.
      * @return The updated population after the evolutionary process has proceeded
      * by one step/iteration.
      */
-    protected abstract List<EvaluatedCandidate<T>> nextEvolutionStep(List<EvaluatedCandidate<T>> evaluatedPopulation,
+    protected abstract List<EvaluatedCandidate<T>> nextEvolutionStep(String populationId,
+    								List<EvaluatedCandidate<T>> evaluatedPopulation,
                                                                      int eliteCount,
                                                                      Random rng);
 

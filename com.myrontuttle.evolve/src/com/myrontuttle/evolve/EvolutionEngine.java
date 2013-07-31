@@ -30,6 +30,7 @@ public interface EvolutionEngine<T>
      * then return the fittest candidate from the final generation.  To return the
      * entire population rather than just the fittest candidate, use the
      * {@link #evolvePopulation(int, int, TerminationCondition[])} method instead.
+     * @param populationId An identifier for which population to evolve
      * @param populationSize The number of candidate solutions present in the population
      * at any point in time.
      * @param eliteCount The number of candidates preserved via elitism.  In elitism, a
@@ -42,7 +43,8 @@ public interface EvolutionEngine<T>
      * @return The fittest solution found by the evolutionary process.
      * @see #evolve(int, int, Collection, TerminationCondition[])
      */
-    T evolve(int populationSize,
+    T evolve(String populationId,
+    		 int populationSize,
              int eliteCount,
              TerminationCondition... conditions);
 
@@ -53,6 +55,7 @@ public interface EvolutionEngine<T>
      * entire population rather than just the fittest candidate, use the
      * {@link #evolvePopulation(int, int, Collection, TerminationCondition[])}
      * method instead.
+     * @param populationId An identifier for which population to evolve
      * @param populationSize The number of candidate solutions present in the population
      * at any point in time.
      * @param eliteCount The number of candidates preserved via elitism.  In elitism, a
@@ -67,7 +70,8 @@ public interface EvolutionEngine<T>
      * @return The fittest solution found by the evolutionary process.
      * @see #evolve(int,int,TerminationCondition[])
      */
-    T evolve(int populationSize,
+    T evolve(String populationId,
+    		 int populationSize,
              int eliteCount,
              Collection<T> seedCandidates,
              TerminationCondition... conditions);
@@ -78,6 +82,7 @@ public interface EvolutionEngine<T>
      * then return all of the candidates from the final generation.  To return just the
      * fittest candidate rather than the entire population, use the
      * {@link #evolve(int, int, TerminationCondition[])} method instead.
+     * @param populationId An identifier for which population to evolve
      * @param populationSize The number of candidate solutions present in the population
      * at any point in time.
      * @param eliteCount The number of candidates preserved via elitism.  In elitism, a
@@ -91,7 +96,8 @@ public interface EvolutionEngine<T>
      * @see #evolve(int, int, Collection, TerminationCondition[])
      * @see #evolvePopulation(int, int, Collection, TerminationCondition[])
      */
-    List<EvaluatedCandidate<T>> evolvePopulation(int populationSize,
+    List<EvaluatedCandidate<T>> evolvePopulation(String populationId,
+    											 int populationSize,
                                                  int eliteCount,
                                                  TerminationCondition... conditions);
 
@@ -101,6 +107,7 @@ public interface EvolutionEngine<T>
      * then return all of the candidates from the final generation.  To return just the
      * fittest candidate rather than the entire population, use the
      * {@link #evolve(int, int, Collection, TerminationCondition[])} method instead.
+     * @param populationId An identifier for which population to evolve
      * @param populationSize The number of candidate solutions present in the population
      * at any point in time.
      * @param eliteCount The number of candidates preserved via elitism.  In elitism, a
@@ -116,7 +123,8 @@ public interface EvolutionEngine<T>
      * @see #evolve(int, int, Collection, TerminationCondition[])
      * @see #evolvePopulation(int, int, Collection, TerminationCondition[])
      */
-    List<EvaluatedCandidate<T>> evolvePopulation(int populationSize,
+    List<EvaluatedCandidate<T>> evolvePopulation(String populationId,
+    											 int populationSize,
                                                  int eliteCount,
                                                  Collection<T> seedCandidates,
                                                  TerminationCondition... conditions);

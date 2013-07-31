@@ -213,6 +213,7 @@ public class IslandEvolution<T>
      * {@link com.myrontuttle.evolve.TerminationCondition} rather than interrupting the evolution in
      * this way.</em></p>
      *
+     * @param populationId An identifier for which population to evolve
      * @param populationSize The population size <em>for each island</em>.  Therefore, if you have 5 islands,
      * setting this parameter to 200 will result in 1000 individuals overall, 200 on each island.
      * @param eliteCount The number of candidates preserved via elitism <em>on each island</em>.  In elitism,
@@ -228,7 +229,8 @@ public class IslandEvolution<T>
      * @param conditions One or more conditions that may cause the evolution to terminate.
      * @return The fittest solution found by the evolutionary process on any of the islands.
      */
-    public T evolve(int populationSize,
+    public T evolve(String populationId,
+    				int populationSize,
                     int eliteCount,
                     int epochLength,
                     int migrantCount,
@@ -265,7 +267,8 @@ public class IslandEvolution<T>
                 migration.migrate(evaluatedPopulations, migrantCount, rng);
 
                 EvolutionUtils.sortEvaluatedPopulation(evaluatedCombinedPopulation, naturalFitness);
-                stats = EvolutionUtils.getPopulationStats(evaluatedCombinedPopulation,
+                stats = EvolutionUtils.getPopulationStats(populationId,
+                										evaluatedCombinedPopulation,
                                                         naturalFitness,
                                                         eliteCount,
                                                         currentEpochIndex,

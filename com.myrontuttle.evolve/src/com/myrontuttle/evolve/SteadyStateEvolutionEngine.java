@@ -106,7 +106,8 @@ public class SteadyStateEvolutionEngine<T> extends AbstractEvolutionEngine<T>
      * {@inheritDoc}
      */
     @Override
-    protected List<EvaluatedCandidate<T>> nextEvolutionStep(List<EvaluatedCandidate<T>> evaluatedPopulation,
+    protected List<EvaluatedCandidate<T>> nextEvolutionStep(String populationId, 
+    						List<EvaluatedCandidate<T>> evaluatedPopulation,
                                                             int eliteCount,
                                                             Random rng)
     {
@@ -121,7 +122,7 @@ public class SteadyStateEvolutionEngine<T> extends AbstractEvolutionEngine<T>
 
             // Express selected candidates in the population
             List<ExpressedCandidate<T>> expressedCandidates = 
-            		expressPopulation(evolutionScheme.apply(selectedCandidates, rng), null);
+            		expressPopulation(evolutionScheme.apply(selectedCandidates, rng), populationId);
 
             notifyPopulationExpressed(expressedCandidates);
             
@@ -186,7 +187,9 @@ public class SteadyStateEvolutionEngine<T> extends AbstractEvolutionEngine<T>
 				evaluateExpressedPopulation(candidates);
     	
         EvolutionUtils.sortEvaluatedPopulation(evaluatedPopulation, fitnessEvaluator.isNatural());
-        PopulationStats<T> stats = EvolutionUtils.getPopulationStats(evaluatedPopulation,
+        PopulationStats<T> stats = EvolutionUtils.getPopulationStats(
+        										  populationId,
+        										  evaluatedPopulation,
                                                   fitnessEvaluator.isNatural(),
                                                   eliteCount,
                                                   getCurrentGenerationIndex(),

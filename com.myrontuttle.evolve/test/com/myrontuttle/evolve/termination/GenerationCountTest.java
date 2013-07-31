@@ -29,10 +29,10 @@ public class GenerationCountTest
     public void testGenerationCounts()
     {
         TerminationCondition condition = new GenerationCount(5);
-        PopulationStats<Object> data = new PopulationStats<Object>(new Object(), 0, 0, 0, true, 2, 0, 3, 100);
+        PopulationStats<Object> data = new PopulationStats<Object>(null, new Object(), 0, 0, 0, true, 2, 0, 3, 100);
         // Generation number 3 is the 4th generation (generation numbers are zero-based).
         assert !condition.shouldTerminate(data) : "Should not terminate after 4th generation.";
-        data = new PopulationStats<Object>(new Object(), 0, 0, 0, true, 2, 0, 4, 100);
+        data = new PopulationStats<Object>(null, new Object(), 0, 0, 0, true, 2, 0, 4, 100);
         // Generation number 4 is the 5th generation (generation numbers are zero-based).
         assert condition.shouldTerminate(data) : "Should terminate after 5th generation.";
     }
