@@ -27,18 +27,21 @@ import com.myrontuttle.evolve.TerminationCondition;
 class Epoch<T> implements Callable<List<EvaluatedCandidate<T>>>
 {
     private final EvolutionEngine<T> island;
+    private final String populationId;
     private final int populationSize;
     private final int eliteCount;
     private final List<T> seedCandidates;
     private final TerminationCondition[] terminationConditions;
 
     Epoch(EvolutionEngine<T> island,
+    	  String populationId,
           int populationSize,
           int eliteCount,
           List<T> seedCandidates,
           TerminationCondition... terminationConditions)
     {
         this.island = island;
+        this.populationId = populationId;
         this.populationSize = populationSize;
         this.eliteCount = eliteCount;
         this.seedCandidates = seedCandidates;
@@ -48,6 +51,6 @@ class Epoch<T> implements Callable<List<EvaluatedCandidate<T>>>
 
     public List<EvaluatedCandidate<T>> call() throws Exception
     {
-        return island.evolvePopulation(populationSize, eliteCount, seedCandidates, terminationConditions);
+        return island.evolvePopulation(populationId, populationSize, eliteCount, seedCandidates, terminationConditions);
     }
 }

@@ -246,7 +246,8 @@ public class IslandEvolution<T>
         long startTime = System.currentTimeMillis();
         while (satisfiedConditions == null)
         {
-            List<Callable<List<EvaluatedCandidate<T>>>> islandEpochs = createEpochTasks(populationSize,
+            List<Callable<List<EvaluatedCandidate<T>>>> islandEpochs = createEpochTasks(populationId,
+            																			populationSize,
                                                                                         eliteCount,
                                                                                         epochLength,
                                                                                         islandPopulations);
@@ -302,7 +303,8 @@ public class IslandEvolution<T>
     /**
      * Create the concurrently-executed tasks that perform evolution on each island.
      */
-    private List<Callable<List<EvaluatedCandidate<T>>>> createEpochTasks(int populationSize,
+    private List<Callable<List<EvaluatedCandidate<T>>>> createEpochTasks(String populationId,
+    																	 int populationSize,
                                                                          int eliteCount,
                                                                          int epochLength,
                                                                          List<List<T>> islandPopulations)
@@ -312,6 +314,7 @@ public class IslandEvolution<T>
         for (int i = 0; i < islands.size(); i++)
         {
             islandEpochs.add(new Epoch<T>(islands.get(i),
+            							  populationId,
                                           populationSize,
                                           eliteCount,
                                           islandPopulations.isEmpty() ? Collections.<T>emptyList() : islandPopulations.get(i),
