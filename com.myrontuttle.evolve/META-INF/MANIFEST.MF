@@ -1,16 +1,16 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Evolve
-Bundle-SymbolicName: com.myrontuttle.evolve
+Bundle-Name: com.myrontuttle.sci.evolve
+Bundle-SymbolicName: com.myrontuttle.sci.evolve
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: MyronTuttle
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Export-Package: com.myrontuttle.evolve,
- com.myrontuttle.evolve.factories,
- com.myrontuttle.evolve.operators,
- com.myrontuttle.evolve.selection,
- com.myrontuttle.evolve.termination,
- com.myrontuttle.evolve.util.random
+Export-Package: com.myrontuttle.sci.evolve,
+ com.myrontuttle.sci.evolve.factories,
+ com.myrontuttle.sci.evolve.operators,
+ com.myrontuttle.sci.evolve.selection,
+ com.myrontuttle.sci.evolve.termination,
+ com.myrontuttle.sci.evolve.util.random
 Import-Package: com.google.common.collect,
  org.testng;version="5.9.0",
  org.testng.annotations;version="5.9.0",
