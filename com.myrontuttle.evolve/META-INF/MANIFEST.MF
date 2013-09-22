@@ -12,8 +12,6 @@ Export-Package: com.myrontuttle.sci.evolve,
  com.myrontuttle.sci.evolve.termination,
  com.myrontuttle.sci.evolve.util.random
 Import-Package: com.google.common.collect,
- org.testng;version="5.9.0",
- org.testng.annotations;version="5.9.0",
  org.uncommons.maths.binary;version="1.2.3",
  org.uncommons.maths.number;version="1.2.3",
  org.uncommons.maths.random;version="1.2.3",
