@@ -7,8 +7,7 @@ import java.util.List;
  * @param <T> The type of evolved entity that we are expressing.
  * @author Myron Tuttle
  */
-public interface ExpressionStrategy<T>
-{
+public interface ExpressionStrategy<T> {
     /**
      * <p>Express a candidate.</p>
      * @param <T> The candidate that we are expressing.
@@ -22,4 +21,5 @@ public interface ExpressionStrategy<T>
      * @param expressedPopulation The list of expressed candidates
      */
     void candidatesExpressed(List<ExpressedCandidate<T>> expressedCandidates);
+
 }
