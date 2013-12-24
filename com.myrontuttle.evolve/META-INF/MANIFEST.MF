@@ -1,10 +1,10 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: com.myrontuttle.sci.evolve
+Bundle-Name: Sci Evolve
 Bundle-SymbolicName: com.myrontuttle.sci.evolve
-Bundle-Version: 1.0.0.qualifier
-Bundle-Vendor: MyronTuttle
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-Version: 1.0.1
+Bundle-Vendor: Myron Tuttle
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Export-Package: com.myrontuttle.sci.evolve,
  com.myrontuttle.sci.evolve.factories,
  com.myrontuttle.sci.evolve.operators,
