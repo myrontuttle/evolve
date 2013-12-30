@@ -8,6 +8,7 @@ import java.util.List;
  * @author Myron Tuttle
  */
 public interface ExpressionStrategy<T> {
+	
     /**
      * <p>Express a candidate.</p>
      * @param <T> The candidate that we are expressing.
@@ -15,6 +16,13 @@ public interface ExpressionStrategy<T> {
      * @return The expressed candidate.
      */
     ExpressedCandidate<T> express(T candidate, String populationId);
+    
+    /**
+     * Provides the length of genome required for this expression
+     * @param populationId The population this candidate belongs to
+     * @return The length of the genome.
+     */
+    int getGenomeLength(String populationId);
     
     /**
      * Invoked after the entire population has been expressed
