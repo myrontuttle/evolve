@@ -34,6 +34,7 @@ public class SteadyStateEvolutionEngine<T> extends AbstractEvolutionEngine<T>
 {
     private final EvolutionaryOperator<T> evolutionScheme;
     private final FitnessEvaluator<? super T> fitnessEvaluator;
+    private final ExpressedFitnessEvaluator<T> expressedFitnessEvaluator;
     private final SelectionStrategy<? super T> selectionStrategy;
     private final int selectionSize;
     private final boolean forceSingleCandidateUpdate;
@@ -80,6 +81,7 @@ public class SteadyStateEvolutionEngine<T> extends AbstractEvolutionEngine<T>
                                       Random rng) {
         super(candidateFactory, fitnessEvaluator, rng);
         this.fitnessEvaluator = fitnessEvaluator;
+        this.expressedFitnessEvaluator = null;
         this.evolutionScheme = evolutionScheme;
         this.selectionStrategy = selectionStrategy;
         this.selectionSize = selectionSize;
@@ -96,6 +98,7 @@ public class SteadyStateEvolutionEngine<T> extends AbstractEvolutionEngine<T>
                                       Random rng) {
         super(candidateFactory, expressedFitnessEvaluator, expressionStrategy, rng);
         this.fitnessEvaluator = null;
+        this.expressedFitnessEvaluator = expressedFitnessEvaluator;
         this.evolutionScheme = evolutionScheme;
         this.selectionStrategy = selectionStrategy;
         this.selectionSize = selectionSize;
@@ -186,11 +189,11 @@ public class SteadyStateEvolutionEngine<T> extends AbstractEvolutionEngine<T>
 		List<EvaluatedCandidate<T>> evaluatedPopulation = 
 				evaluateExpressedPopulation(candidates);
     	
-        EvolutionUtils.sortEvaluatedPopulation(evaluatedPopulation, fitnessEvaluator.isNatural());
+        EvolutionUtils.sortEvaluatedPopulation(evaluatedPopulation, expressedFitnessEvaluator.isNatural());
         PopulationStats<T> stats = EvolutionUtils.getPopulationStats(
         										  populationId,
         										  evaluatedPopulation,
-                                                  fitnessEvaluator.isNatural(),
+        										  expressedFitnessEvaluator.isNatural(),
                                                   eliteCount,
                                                   getCurrentGenerationIndex(),
                                                   getStartTime());
@@ -201,11 +204,11 @@ public class SteadyStateEvolutionEngine<T> extends AbstractEvolutionEngine<T>
         List<TerminationCondition> satisfiedConditions = EvolutionUtils.shouldContinue(stats, getTerminationConditions());
         if (satisfiedConditions == null) {
 
-            EvolutionUtils.sortEvaluatedPopulation(evaluatedPopulation, fitnessEvaluator.isNatural());
+            EvolutionUtils.sortEvaluatedPopulation(evaluatedPopulation, expressedFitnessEvaluator.isNatural());
             List<T> selectedCandidates = selectionStrategy.select(evaluatedPopulation,
-                                                                  fitnessEvaluator.isNatural(),
-                                                                  selectionSize,
-                                                                  rng);
+            													expressedFitnessEvaluator.isNatural(),
+                                                                selectionSize,
+                                                                rng);
             
             // Express selected candidates in the population
             List<ExpressedCandidate<T>> offspring = 

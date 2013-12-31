@@ -37,6 +37,7 @@ public class EvolutionStrategyEngine<T> extends AbstractEvolutionEngine<T>
 {
     private final EvolutionaryOperator<T> evolutionScheme;
     private final FitnessEvaluator<? super T> fitnessEvaluator;
+    private final ExpressedFitnessEvaluator<T> expressedFitnessEvaluator;
     private final boolean plusSelection;
     private final int offspringMultiplier;
 
@@ -71,6 +72,7 @@ public class EvolutionStrategyEngine<T> extends AbstractEvolutionEngine<T>
         super(candidateFactory, fitnessEvaluator, rng);
         this.evolutionScheme = evolutionScheme;
         this.fitnessEvaluator = fitnessEvaluator;
+        this.expressedFitnessEvaluator = null;
         this.plusSelection = plusSelection;
         this.offspringMultiplier = offspringMultiplier;
     }
@@ -86,6 +88,7 @@ public class EvolutionStrategyEngine<T> extends AbstractEvolutionEngine<T>
         super(candidateFactory, expressedFitnessEvaluator, expressionStrategy, rng);
         this.evolutionScheme = evolutionScheme;
         this.fitnessEvaluator = null;
+        this.expressedFitnessEvaluator = expressedFitnessEvaluator;
         this.plusSelection = plusSelection;
         this.offspringMultiplier = offspringMultiplier;
     }
@@ -154,10 +157,10 @@ public class EvolutionStrategyEngine<T> extends AbstractEvolutionEngine<T>
 		List<EvaluatedCandidate<T>> evaluatedPopulation = 
 				evaluateExpressedPopulation(candidates);
 
-        EvolutionUtils.sortEvaluatedPopulation(evaluatedPopulation, fitnessEvaluator.isNatural());
+        EvolutionUtils.sortEvaluatedPopulation(evaluatedPopulation, expressedFitnessEvaluator.isNatural());
         PopulationStats<T> stats = EvolutionUtils.getPopulationStats(populationId,
         										  evaluatedPopulation,
-                                                  fitnessEvaluator.isNatural(),
+        										  expressedFitnessEvaluator.isNatural(),
                                                   eliteCount,
                                                   getCurrentGenerationIndex(),
                                                   getStartTime());

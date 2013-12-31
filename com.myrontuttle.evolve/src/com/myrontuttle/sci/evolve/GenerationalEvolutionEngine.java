@@ -48,6 +48,7 @@ public class GenerationalEvolutionEngine<T> extends AbstractEvolutionEngine<T>
 {
     private final EvolutionaryOperator<T> evolutionScheme;
     private final FitnessEvaluator<? super T> fitnessEvaluator;
+    private final ExpressedFitnessEvaluator<T> expressedFitnessEvaluator;
     private final SelectionStrategy<? super T> selectionStrategy;
 
     /**
@@ -74,6 +75,7 @@ public class GenerationalEvolutionEngine<T> extends AbstractEvolutionEngine<T>
         this.evolutionScheme = evolutionScheme;
         this.fitnessEvaluator = fitnessEvaluator;
         this.selectionStrategy = selectionStrategy;
+        this.expressedFitnessEvaluator = null;
     }
     
 
@@ -87,6 +89,7 @@ public class GenerationalEvolutionEngine<T> extends AbstractEvolutionEngine<T>
         super(candidateFactory, expressedFitnessEvaluator, expressionStrategy, rng);
         this.evolutionScheme = evolutionScheme;
         this.fitnessEvaluator = null;
+        this.expressedFitnessEvaluator = expressedFitnessEvaluator;
         this.selectionStrategy = selectionStrategy;
     }
 
@@ -171,11 +174,11 @@ public class GenerationalEvolutionEngine<T> extends AbstractEvolutionEngine<T>
 		List<EvaluatedCandidate<T>> evaluatedPopulation = 
 				evaluateExpressedPopulation(candidates);
 
-        EvolutionUtils.sortEvaluatedPopulation(evaluatedPopulation, fitnessEvaluator.isNatural());
+        EvolutionUtils.sortEvaluatedPopulation(evaluatedPopulation, expressedFitnessEvaluator.isNatural());
         PopulationStats<T> stats = EvolutionUtils.getPopulationStats(
         										  populationId,
         										  evaluatedPopulation,
-                                                  fitnessEvaluator.isNatural(),
+        										  expressedFitnessEvaluator.isNatural(),
                                                   eliteCount,
                                                   getCurrentGenerationIndex(),
                                                   getStartTime());
@@ -197,9 +200,9 @@ public class GenerationalEvolutionEngine<T> extends AbstractEvolutionEngine<T>
             // Then select candidates that will be operated on to create the evolved
             // portion of the next generation.
             population.addAll(selectionStrategy.select(evaluatedPopulation,
-                                                       fitnessEvaluator.isNatural(),
-                                                       evaluatedPopulation.size() - eliteCount,
-                                                       rng));
+            										expressedFitnessEvaluator.isNatural(),
+                                                    evaluatedPopulation.size() - eliteCount,
+                                                    rng));
             // Then evolve the population.
             population = evolutionScheme.apply(population, rng);
             // When the evolution is finished, add the elite to the population.
