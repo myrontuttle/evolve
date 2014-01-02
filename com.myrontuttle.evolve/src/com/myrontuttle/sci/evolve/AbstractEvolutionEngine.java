@@ -238,20 +238,25 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
     										int populationSize,
     										int eliteCount,
             								TerminationCondition... conditions) {
-    	
-    	if (candidates == null || candidates.isEmpty()) {
-    		 if (eliteCount < 0 || eliteCount >= populationSize) {
-    			 throw new IllegalArgumentException("Elite count must be non-negative and less than population size.");
-    		 }
-    		 if (conditions.length == 0) {
-    			 throw new IllegalArgumentException("At least one TerminationCondition must be specified.");
-    		 }
 
-    		 satisfiedTerminationConditions = null;
-    		 currentGenerationIndex = 0;
-    		 startTime = System.currentTimeMillis();
+		if (eliteCount < 0 || eliteCount >= populationSize) {
+			throw new IllegalArgumentException("Elite count must be non-negative and less than population size.");
+		}
+		if (conditions.length == 0) {
+			throw new IllegalArgumentException("At least one TerminationCondition must be specified.");
+		}
+		
+		if (candidates == null || candidates.isEmpty()) {
+			candidates = new ArrayList<ExpressedCandidate<T>>();
 
-    		 List<T> population = candidateFactory.generateInitialPopulation(populationSize,
+			satisfiedTerminationConditions = null;
+			currentGenerationIndex = 0;
+			startTime = System.currentTimeMillis();
+		}
+		
+    	if (candidates.size() < populationSize) {
+
+    		 List<T> population = candidateFactory.generateInitialPopulation(populationSize - candidates.size(),
     	                                                                        rng);
     		 // Express each candidate in the population
              List<ExpressedCandidate<T>> expressedCandidates = 
@@ -259,15 +264,14 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
              
              notifyPopulationExpressed(expressedCandidates);
              
-             return expressedCandidates;
-    	} else {
-
-    		this.terminationConditions = conditions;
-
-        	++currentGenerationIndex;
-
-            return nextExpressionStep(candidates, eliteCount, populationId, rng);
+             candidates.addAll(expressedCandidates);
     	}
+
+		this.terminationConditions = conditions;
+
+    	++currentGenerationIndex;
+
+        return nextExpressionStep(candidates, eliteCount, populationId, rng);
     }
 
     /**
