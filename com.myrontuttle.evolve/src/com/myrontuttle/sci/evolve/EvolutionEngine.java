@@ -136,6 +136,7 @@ public interface EvolutionEngine<T>
      * @param populationId Identifier for this population
      * @param populationSize The number of candidate solutions present in the population
      * at any point in time.
+     * @param currentGeneration The generation of this population
      * @param eliteCount The number of candidates preserved via elitism.  In elitism, a
      * sub-set of the population with the best fitness scores are preserved unchanged in
      * the subsequent generation.  Candidate solutions that are preserved unchanged through
@@ -149,6 +150,7 @@ public interface EvolutionEngine<T>
     										List<ExpressedCandidate<T>> candidates,
     										String populationId,
     										int populationSize,
+    										int currentGeneration,
     										int eliteCount,
             								TerminationCondition... conditions);
 

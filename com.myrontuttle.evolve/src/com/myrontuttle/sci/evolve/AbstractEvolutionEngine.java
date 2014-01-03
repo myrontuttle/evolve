@@ -236,6 +236,7 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
     										List<ExpressedCandidate<T>> candidates,
     										String populationId,
     										int populationSize,
+    										int currentGeneration,
     										int eliteCount,
             								TerminationCondition... conditions) {
 
@@ -250,8 +251,13 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
 			candidates = new ArrayList<ExpressedCandidate<T>>();
 
 			satisfiedTerminationConditions = null;
-			currentGenerationIndex = 0;
 			startTime = System.currentTimeMillis();
+		}
+		
+		if (currentGeneration <= 0) {
+			currentGenerationIndex = 0;
+		} else {
+			currentGenerationIndex = currentGeneration;
 		}
 		
     	if (candidates.size() < populationSize) {
