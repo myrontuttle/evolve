@@ -27,7 +27,8 @@ public interface ExpressionStrategy<T> {
     /**
      * Invoked after the entire population has been expressed
      * @param expressedPopulation The list of expressed candidates
+     * @param populationId The population these candidates belong to
      */
-    void candidatesExpressed(List<ExpressedCandidate<T>> expressedCandidates);
+    void candidatesExpressed(List<ExpressedCandidate<T>> expressedCandidates, String populationId);
 
 }

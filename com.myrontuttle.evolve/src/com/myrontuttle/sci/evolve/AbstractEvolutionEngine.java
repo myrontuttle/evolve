@@ -188,7 +188,7 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
             // Express each candidate in the population
             List<ExpressedCandidate<T>> expressedCandidates = expressPopulation(population, populationId);
             
-            notifyPopulationExpressed(expressedCandidates);
+            notifyPopulationExpressed(expressedCandidates, populationId);
             
             //Calculate the fitness scores for each member of the expressed population.
             evaluatedPopulation = evaluateExpressedPopulation(expressedCandidates);
@@ -268,7 +268,7 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
              List<ExpressedCandidate<T>> expressedCandidates = 
             		 		expressPopulation(population, populationId);
              
-             notifyPopulationExpressed(expressedCandidates);
+             notifyPopulationExpressed(expressedCandidates, populationId);
              
              candidates.addAll(expressedCandidates);
     	}
@@ -293,7 +293,7 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
         List<ExpressedCandidate<T>> expressedCandidates = 
        		 		expressPopulation(population, populationId);
         
-        notifyPopulationExpressed(expressedCandidates);
+        notifyPopulationExpressed(expressedCandidates, populationId);
         
         return expressedCandidates;
     }
@@ -553,8 +553,9 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
      * Send the expressed population to the Expression Strategy for extra processing
      * @param stats Information about the current state of the population.
      */
-    protected void notifyPopulationExpressed(List<ExpressedCandidate<T>> expressedCandidates) {
-        expressionStrategy.candidatesExpressed(expressedCandidates);
+    protected void notifyPopulationExpressed(List<ExpressedCandidate<T>> expressedCandidates, 
+    		String populationId) {
+        expressionStrategy.candidatesExpressed(expressedCandidates, populationId);
     }
 
     /**

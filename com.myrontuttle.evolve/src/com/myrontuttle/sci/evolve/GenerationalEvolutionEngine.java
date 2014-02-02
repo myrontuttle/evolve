@@ -154,7 +154,7 @@ public class GenerationalEvolutionEngine<T> extends AbstractEvolutionEngine<T>
             List<ExpressedCandidate<T>> expressedCandidates = 
             					expressPopulation(population, populationId);
             
-            notifyPopulationExpressed(expressedCandidates);
+            notifyPopulationExpressed(expressedCandidates, populationId);
             
             //Calculate the fitness scores for each member of the expressed population.
             return evaluateExpressedPopulation(expressedCandidates);
@@ -213,7 +213,7 @@ public class GenerationalEvolutionEngine<T> extends AbstractEvolutionEngine<T>
             List<ExpressedCandidate<T>> newExpressedCandidates = 
             					expressPopulation(population, populationId);
             
-            notifyPopulationExpressed(newExpressedCandidates);
+            notifyPopulationExpressed(newExpressedCandidates, populationId);
             
     		return newExpressedCandidates;
         } else {
