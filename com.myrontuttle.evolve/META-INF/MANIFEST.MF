@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Sci Evolve
 Bundle-SymbolicName: com.myrontuttle.sci.evolve
-Bundle-Version: 2.1.0
+Bundle-Version: 2.2.0
 Bundle-Vendor: Myron Tuttle
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Export-Package: com.myrontuttle.sci.evolve,

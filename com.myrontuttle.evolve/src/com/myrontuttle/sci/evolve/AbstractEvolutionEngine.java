@@ -281,6 +281,24 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public List<ExpressedCandidate<T>> expressInitialPopulation(
+    										String populationId,
+    										int populationSize) {
+
+		 List<T> population = candidateFactory.generateInitialPopulation(populationSize, rng);
+		 
+		 // Express each candidate in the population
+        List<ExpressedCandidate<T>> expressedCandidates = 
+       		 		expressPopulation(population, populationId);
+        
+        notifyPopulationExpressed(expressedCandidates);
+        
+        return expressedCandidates;
+    }
+
+    /**
      * Indicates whether to include gene expression in evolution
      * @return Indicates gene expression use
      */

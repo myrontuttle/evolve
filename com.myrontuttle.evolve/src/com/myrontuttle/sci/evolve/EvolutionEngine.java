@@ -153,7 +153,16 @@ public interface EvolutionEngine<T>
     										int currentGeneration,
     										int eliteCount,
             								TerminationCondition... conditions);
-
+    /**
+     * Generates an initial list of candidates and expresses them
+     * @param populationId Identifier for this population
+     * @param populationSize The number of candidate solutions present in the population
+     * at any point in time.
+     * @return
+     */
+    public List<ExpressedCandidate<T>> expressInitialPopulation(
+											String populationId,
+											int populationSize);
 
     /**
      * Adds a listener to receive status updates on the evolution progress.
