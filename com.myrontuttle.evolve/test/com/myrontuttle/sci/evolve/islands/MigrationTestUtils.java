@@ -15,7 +15,7 @@
 //=============================================================================
 package com.myrontuttle.sci.evolve.islands;
 
-import com.myrontuttle.sci.evolve.EvaluatedCandidate;
+import com.myrontuttle.sci.evolve.api.EvaluatedCandidate;
 
 import java.util.List;
 import java.util.ArrayList;

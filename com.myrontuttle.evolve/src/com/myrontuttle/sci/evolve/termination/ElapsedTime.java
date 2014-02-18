@@ -15,8 +15,8 @@
 //=============================================================================
 package com.myrontuttle.sci.evolve.termination;
 
-import com.myrontuttle.sci.evolve.PopulationStats;
-import com.myrontuttle.sci.evolve.TerminationCondition;
+import com.myrontuttle.sci.evolve.api.PopulationStats;
+import com.myrontuttle.sci.evolve.api.TerminationCondition;
 
 /**
  * Terminates evolution after a pre-determined period of time has elapsed.

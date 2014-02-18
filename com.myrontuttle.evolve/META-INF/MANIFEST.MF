@@ -2,16 +2,18 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Sci Evolve
 Bundle-SymbolicName: com.myrontuttle.sci.evolve
-Bundle-Version: 2.3.0
+Bundle-Version: 3.0.0
 Bundle-Vendor: Myron Tuttle
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Export-Package: com.myrontuttle.sci.evolve,
+ com.myrontuttle.sci.evolve.engines,
  com.myrontuttle.sci.evolve.factories,
  com.myrontuttle.sci.evolve.operators,
  com.myrontuttle.sci.evolve.selection,
  com.myrontuttle.sci.evolve.termination,
- com.myrontuttle.sci.evolve.util.random
+ com.myrontuttle.sci.evolve.util
 Import-Package: com.google.common.collect,
+ com.myrontuttle.sci.evolve.api,
  org.uncommons.maths.binary;version="1.2.3",
  org.uncommons.maths.number;version="1.2.3",
  org.uncommons.maths.random;version="1.2.3",

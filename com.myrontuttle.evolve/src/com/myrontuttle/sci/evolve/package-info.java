@@ -14,9 +14,8 @@
 // limitations under the License.
 //=============================================================================
 /**
- * This package provides a framework for evolutionary computation.  It defines generic
- * interfaces for evolutionary operators, fitness functions and selection strategies.
- * It also provides an all-purpose {@link org.uncommons.watchmaker.framework.EvolutionEngine}.
+ * This package provides an implementation for evolutionary computation.  
+ * It provides all-purpose {@link org.uncommons.watchmaker.framework.EvolutionEngine}.
  * @author Daniel Dyer
  */
 package com.myrontuttle.sci.evolve;

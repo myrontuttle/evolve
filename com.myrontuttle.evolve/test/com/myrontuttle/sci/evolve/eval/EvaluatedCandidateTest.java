@@ -13,11 +13,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //=============================================================================
-package com.myrontuttle.sci.evolve;
+package com.myrontuttle.sci.evolve.eval;
 
 import org.testng.annotations.Test;
 
-import com.myrontuttle.sci.evolve.EvaluatedCandidate;
+import com.myrontuttle.sci.evolve.api.EvaluatedCandidate;
 
 /**
  * Unit test for the simple {@link EvaluatedCandidate} class.  Ensures that

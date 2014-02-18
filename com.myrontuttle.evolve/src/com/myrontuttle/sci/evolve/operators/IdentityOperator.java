@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import com.myrontuttle.sci.evolve.EvolutionaryOperator;
+import com.myrontuttle.sci.evolve.api.EvolutionaryOperator;
 
 /**
  * Evolutionary operator that simply returns the selected candidates unaltered.

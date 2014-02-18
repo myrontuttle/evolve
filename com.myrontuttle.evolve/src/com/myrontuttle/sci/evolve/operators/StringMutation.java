@@ -22,7 +22,7 @@ import org.uncommons.maths.number.ConstantGenerator;
 import org.uncommons.maths.number.NumberGenerator;
 import org.uncommons.maths.random.Probability;
 
-import com.myrontuttle.sci.evolve.EvolutionaryOperator;
+import com.myrontuttle.sci.evolve.api.EvolutionaryOperator;
 
 /**
  * Mutation of individual characters in a string according to some

@@ -21,7 +21,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import com.myrontuttle.sci.evolve.CandidateFactory;
+import com.myrontuttle.sci.evolve.api.CandidateFactory;
 
 /**
  * Convenient base class for implementations of

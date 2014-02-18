@@ -18,9 +18,9 @@ package com.myrontuttle.sci.evolve.selection;
 import java.util.ArrayList;
 import java.util.List;
 import org.testng.annotations.Test;
-import com.myrontuttle.sci.evolve.EvaluatedCandidate;
 import com.myrontuttle.sci.evolve.FrameworkTestUtils;
-import com.myrontuttle.sci.evolve.SelectionStrategy;
+import com.myrontuttle.sci.evolve.api.SelectionStrategy;
+import com.myrontuttle.sci.evolve.api.EvaluatedCandidate;
 import com.myrontuttle.sci.evolve.selection.RouletteWheelSelection;
 
 /**

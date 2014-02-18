@@ -13,13 +13,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //=============================================================================
-package com.myrontuttle.sci.evolve;
+package com.myrontuttle.sci.evolve.engines;
 
 import java.util.Arrays;
 import java.util.List;
 import org.testng.annotations.Test;
-import com.myrontuttle.sci.evolve.EvaluatedCandidate;
-import com.myrontuttle.sci.evolve.EvolutionStrategyEngine;
+
+import com.myrontuttle.sci.evolve.FrameworkTestUtils;
+import com.myrontuttle.sci.evolve.api.EvaluatedCandidate;
+import com.myrontuttle.sci.evolve.engines.EvolutionStrategyEngine;
+import com.myrontuttle.sci.evolve.eval.IntegerEvaluator;
 import com.myrontuttle.sci.evolve.factories.StubIntegerFactory;
 import com.myrontuttle.sci.evolve.operators.IntegerAdjuster;
 

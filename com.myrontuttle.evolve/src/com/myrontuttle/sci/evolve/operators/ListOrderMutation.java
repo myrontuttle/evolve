@@ -22,7 +22,7 @@ import java.util.Random;
 import org.uncommons.maths.number.ConstantGenerator;
 import org.uncommons.maths.number.NumberGenerator;
 
-import com.myrontuttle.sci.evolve.EvolutionaryOperator;
+import com.myrontuttle.sci.evolve.api.EvolutionaryOperator;
 
 /**
  * A special mutation implementation that instead of changing the

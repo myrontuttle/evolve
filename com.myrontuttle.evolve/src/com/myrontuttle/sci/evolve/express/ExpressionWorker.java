@@ -1,10 +1,12 @@
-package com.myrontuttle.sci.evolve;
+package com.myrontuttle.sci.evolve.express;
 
 import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import com.myrontuttle.sci.evolve.api.EvolutionEngine;
+import com.myrontuttle.sci.evolve.api.ExpressedCandidate;
 import com.myrontuttle.sci.evolve.util.concurrent.ConfigurableThreadFactory;
 import com.myrontuttle.sci.evolve.util.id.IDSource;
 import com.myrontuttle.sci.evolve.util.id.IntSequenceIDSource;
@@ -18,8 +20,8 @@ import com.myrontuttle.sci.evolve.util.id.StringPrefixIDSource;
  * (http://www.terracotta.org) or similar.
  * @author Myron Tuttle
  */
-public class ExpressionWorker
-{
+public class ExpressionWorker {
+	
     // Provide each worker instance with a unique name with which to prefix its threads.
     private static final IDSource<String> WORKER_ID_SOURCE = new StringPrefixIDSource("FitnessEvaluationWorker",
                                                                                       new IntSequenceIDSource());
@@ -39,8 +41,7 @@ public class ExpressionWorker
     /**
      * Creates a FitnessEvaluationWorker that uses daemon threads.
      */
-    ExpressionWorker()
-    {
+    public ExpressionWorker() {
         this(true);
     }
 
@@ -48,8 +49,7 @@ public class ExpressionWorker
     /**
      * @param daemonWorkerThreads If true, any worker threads created will be daemon threads.
      */
-    private ExpressionWorker(boolean daemonWorkerThreads)
-    {
+    private ExpressionWorker(boolean daemonWorkerThreads) {
         ConfigurableThreadFactory threadFactory = new ConfigurableThreadFactory(WORKER_ID_SOURCE.nextID(),
                                                                                 Thread.NORM_PRIORITY,
                                                                                 daemonWorkerThreads);
@@ -63,8 +63,7 @@ public class ExpressionWorker
     }
 
 
-    public <T> Future<ExpressedCandidate<T>> submit(ExpressionTask<T> task)
-    {
+    public <T> Future<ExpressedCandidate<T>> submit(ExpressionTask<T> task) {
         return executor.submit(task);
     }
 
@@ -75,8 +74,7 @@ public class ExpressionWorker
      * program will do nothing.
      * @param args Program arguments, should be empty.
      */
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         // The program will not exit immediately upon completion of the main method because
         // the worker is configured to use non-daemon threads that keep the JVM alive.
         new ExpressionWorker(false);
@@ -90,8 +88,7 @@ public class ExpressionWorker
      * @throws Throwable Any exception or error that occurs during finalisation.
      */
     @Override
-    protected void finalize() throws Throwable
-    {
+    protected void finalize() throws Throwable {
         executor.shutdown();
         super.finalize();
     }

@@ -18,9 +18,9 @@ package com.myrontuttle.sci.evolve.islands;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-import com.myrontuttle.sci.evolve.EvaluatedCandidate;
-import com.myrontuttle.sci.evolve.EvolutionEngine;
-import com.myrontuttle.sci.evolve.TerminationCondition;
+import com.myrontuttle.sci.evolve.api.EvolutionEngine;
+import com.myrontuttle.sci.evolve.api.TerminationCondition;
+import com.myrontuttle.sci.evolve.api.EvaluatedCandidate;
 
 /**
  * @author Daniel Dyer

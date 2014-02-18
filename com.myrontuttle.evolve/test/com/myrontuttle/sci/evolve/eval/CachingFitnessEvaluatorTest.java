@@ -13,14 +13,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //=============================================================================
-package com.myrontuttle.sci.evolve;
+package com.myrontuttle.sci.evolve.eval;
 
 import java.util.Collections;
 import java.util.List;
 import org.testng.annotations.Test;
 
-import com.myrontuttle.sci.evolve.CachingFitnessEvaluator;
-import com.myrontuttle.sci.evolve.FitnessEvaluator;
+import com.myrontuttle.sci.evolve.api.FitnessEvaluator;
+import com.myrontuttle.sci.evolve.eval.CachingFitnessEvaluator;
 
 /**
  * Unit test for the {@link CachingFitnessEvaluator} wrapper.

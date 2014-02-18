@@ -23,7 +23,7 @@ import org.uncommons.maths.number.ConstantGenerator;
 import org.uncommons.maths.number.NumberGenerator;
 import org.uncommons.maths.random.Probability;
 
-import com.myrontuttle.sci.evolve.EvolutionaryOperator;
+import com.myrontuttle.sci.evolve.api.EvolutionaryOperator;
 
 /**
  * An evolutionary operator that randomly reverses a subsection of a list.

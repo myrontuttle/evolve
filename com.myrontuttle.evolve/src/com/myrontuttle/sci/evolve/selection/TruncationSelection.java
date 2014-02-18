@@ -22,8 +22,8 @@ import java.util.Random;
 import org.uncommons.maths.number.ConstantGenerator;
 import org.uncommons.maths.number.NumberGenerator;
 
-import com.myrontuttle.sci.evolve.EvaluatedCandidate;
-import com.myrontuttle.sci.evolve.SelectionStrategy;
+import com.myrontuttle.sci.evolve.api.SelectionStrategy;
+import com.myrontuttle.sci.evolve.api.EvaluatedCandidate;
 
 /**
  * Implements selection of <i>n</i> candidates from a population by simply

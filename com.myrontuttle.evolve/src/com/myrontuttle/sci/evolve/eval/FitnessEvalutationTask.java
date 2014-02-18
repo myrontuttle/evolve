@@ -13,18 +13,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //=============================================================================
-package com.myrontuttle.sci.evolve;
+package com.myrontuttle.sci.evolve.eval;
 
 import java.util.List;
 import java.util.concurrent.Callable;
+
+import com.myrontuttle.sci.evolve.api.FitnessEvaluator;
+import com.myrontuttle.sci.evolve.api.EvaluatedCandidate;
 
 /**
  * Callable task for performing parallel fitness evaluations.
  * @param <T> The type of entity for which fitness is calculated.
  * @author Daniel Dyer
  */
-class FitnessEvalutationTask<T> implements Callable<EvaluatedCandidate<T>>
-{
+public class FitnessEvalutationTask<T> implements Callable<EvaluatedCandidate<T>> {
     private final FitnessEvaluator<? super T> fitnessEvaluator;
     private final T candidate;
     private final List<T> population;
@@ -37,18 +39,16 @@ class FitnessEvalutationTask<T> implements Callable<EvaluatedCandidate<T>>
      * of the candidates to evaluate along with any other individuals that are
      * not being evaluated by this task.
      */
-    FitnessEvalutationTask(FitnessEvaluator<? super T> fitnessEvaluator,
+    public FitnessEvalutationTask(FitnessEvaluator<? super T> fitnessEvaluator,
                            T candidate,
-                           List<T> population)
-    {
+                           List<T> population) {
         this.fitnessEvaluator = fitnessEvaluator;
         this.candidate = candidate;
         this.population = population;
     }
 
 
-    public EvaluatedCandidate<T> call()
-    {
+    public EvaluatedCandidate<T> call() {
         return new EvaluatedCandidate<T>(candidate,
                                          fitnessEvaluator.getFitness(candidate, population));
     }

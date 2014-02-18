@@ -13,7 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //=============================================================================
-package com.myrontuttle.sci.evolve;
+package com.myrontuttle.sci.evolve.engines;
 
 //import java.security.GeneralSecurityException;
 import java.util.ArrayList;
@@ -26,6 +26,23 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 import java.util.Random;
+
+import com.myrontuttle.sci.evolve.api.CandidateFactory;
+import com.myrontuttle.sci.evolve.api.EvaluatedCandidate;
+import com.myrontuttle.sci.evolve.api.EvolutionEngine;
+import com.myrontuttle.sci.evolve.api.EvolutionObserver;
+import com.myrontuttle.sci.evolve.api.ExpressedCandidate;
+import com.myrontuttle.sci.evolve.api.ExpressedFitnessEvaluator;
+import com.myrontuttle.sci.evolve.api.ExpressionStrategy;
+import com.myrontuttle.sci.evolve.api.FitnessEvaluator;
+import com.myrontuttle.sci.evolve.api.PopulationStats;
+import com.myrontuttle.sci.evolve.api.TerminationCondition;
+import com.myrontuttle.sci.evolve.eval.ExpressedFitnessEvalutationTask;
+import com.myrontuttle.sci.evolve.eval.FitnessEvaluationWorker;
+import com.myrontuttle.sci.evolve.eval.FitnessEvalutationTask;
+import com.myrontuttle.sci.evolve.express.ExpressionTask;
+import com.myrontuttle.sci.evolve.express.ExpressionWorker;
+import com.myrontuttle.sci.evolve.util.EvolutionUtils;
 
 
 /**

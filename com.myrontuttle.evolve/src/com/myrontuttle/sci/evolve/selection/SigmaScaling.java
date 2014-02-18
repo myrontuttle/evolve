@@ -20,8 +20,8 @@ import java.util.List;
 import java.util.Random;
 import org.uncommons.maths.statistics.DataSet;
 
-import com.myrontuttle.sci.evolve.EvaluatedCandidate;
-import com.myrontuttle.sci.evolve.SelectionStrategy;
+import com.myrontuttle.sci.evolve.api.SelectionStrategy;
+import com.myrontuttle.sci.evolve.api.EvaluatedCandidate;
 
 /**
  * An alternative to straightforward fitness-proportionate selection such as that offered

@@ -1,7 +1,7 @@
 /**
  * A variety of random number generators available
  */
-package com.myrontuttle.sci.evolve;
+package com.myrontuttle.sci.evolve.util;
 
 import java.security.GeneralSecurityException;
 import java.util.Random;

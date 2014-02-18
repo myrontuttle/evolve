@@ -13,9 +13,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //=============================================================================
-package com.myrontuttle.sci.evolve;
+package com.myrontuttle.sci.evolve.eval;
 
 import com.google.common.collect.MapMaker;
+import com.myrontuttle.sci.evolve.api.EvolutionaryOperator;
+import com.myrontuttle.sci.evolve.api.FitnessEvaluator;
+
 import java.util.List;
 import java.util.concurrent.ConcurrentMap;
 

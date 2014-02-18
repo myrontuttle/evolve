@@ -1,14 +1,16 @@
-package com.myrontuttle.sci.evolve;
+package com.myrontuttle.sci.evolve.express;
 
 import java.util.concurrent.Callable;
+
+import com.myrontuttle.sci.evolve.api.ExpressedCandidate;
+import com.myrontuttle.sci.evolve.api.ExpressionStrategy;
 
 /**
  * Callable task for performing parallel expressions.
  * @param <T> The type of entity that is expressed
  * @author Myron Tuttle
  */
-class ExpressionTask<T> implements Callable<ExpressedCandidate<T>>
-{
+public class ExpressionTask<T> implements Callable<ExpressedCandidate<T>> {
     private final ExpressionStrategy<T> expressionStrategy;
     private final T candidate;
     private final String populationId;
@@ -21,7 +23,7 @@ class ExpressionTask<T> implements Callable<ExpressedCandidate<T>>
      * of the candidates to evaluate along with any other individuals that are
      * not being evaluated by this task.
      */
-    ExpressionTask(ExpressionStrategy<T> expressionStrategy,
+    public ExpressionTask(ExpressionStrategy<T> expressionStrategy,
                            T candidate,
                            String populationId) {
         this.expressionStrategy = expressionStrategy;

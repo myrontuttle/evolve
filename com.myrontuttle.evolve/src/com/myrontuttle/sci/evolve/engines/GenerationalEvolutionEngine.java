@@ -13,7 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //=============================================================================
-package com.myrontuttle.sci.evolve;
+package com.myrontuttle.sci.evolve.engines;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -21,7 +21,19 @@ import java.util.List;
 
 import java.util.Random;
 
+import com.myrontuttle.sci.evolve.api.CandidateFactory;
+import com.myrontuttle.sci.evolve.api.EvolutionaryOperator;
+import com.myrontuttle.sci.evolve.api.ExpressedCandidate;
+import com.myrontuttle.sci.evolve.api.ExpressedFitnessEvaluator;
+import com.myrontuttle.sci.evolve.api.ExpressionStrategy;
+import com.myrontuttle.sci.evolve.api.FitnessEvaluator;
+import com.myrontuttle.sci.evolve.api.SelectionStrategy;
+import com.myrontuttle.sci.evolve.api.TerminationCondition;
+import com.myrontuttle.sci.evolve.api.EvaluatedCandidate;
+import com.myrontuttle.sci.evolve.api.PopulationStats;
+import com.myrontuttle.sci.evolve.eval.NullFitnessEvaluator;
 import com.myrontuttle.sci.evolve.interactive.InteractiveSelection;
+import com.myrontuttle.sci.evolve.util.EvolutionUtils;
 
 /**
  * <p>This class implements a general-purpose generational evolutionary algorithm.
@@ -109,8 +121,7 @@ public class GenerationalEvolutionEngine<T> extends AbstractEvolutionEngine<T>
     public GenerationalEvolutionEngine(CandidateFactory<T> candidateFactory,
                                        EvolutionaryOperator<T> evolutionScheme,
                                        InteractiveSelection<T> selectionStrategy,
-                                       Random rng)
-    {
+                                       Random rng) {
         this(candidateFactory,
              evolutionScheme,
              new NullFitnessEvaluator(), // No fitness evaluations to perform.
@@ -126,8 +137,7 @@ public class GenerationalEvolutionEngine<T> extends AbstractEvolutionEngine<T>
     protected List<EvaluatedCandidate<T>> nextEvolutionStep(String populationId,
     						List<EvaluatedCandidate<T>> evaluatedPopulation,
                                                             int eliteCount,
-                                                            Random rng)
-    {
+                                                            Random rng) {
         List<T> population = new ArrayList<T>(evaluatedPopulation.size());
 
         // First perform any elitist selection.

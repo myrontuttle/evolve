@@ -27,20 +27,20 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import com.myrontuttle.sci.evolve.CandidateFactory;
-import com.myrontuttle.sci.evolve.EvaluatedCandidate;
-import com.myrontuttle.sci.evolve.EvolutionEngine;
-import com.myrontuttle.sci.evolve.EvolutionObserver;
-import com.myrontuttle.sci.evolve.EvolutionUtils;
-import com.myrontuttle.sci.evolve.EvolutionaryOperator;
-import com.myrontuttle.sci.evolve.ExpressedFitnessEvaluator;
-import com.myrontuttle.sci.evolve.ExpressionStrategy;
-import com.myrontuttle.sci.evolve.FitnessEvaluator;
-import com.myrontuttle.sci.evolve.GenerationalEvolutionEngine;
-import com.myrontuttle.sci.evolve.PopulationStats;
-import com.myrontuttle.sci.evolve.SelectionStrategy;
-import com.myrontuttle.sci.evolve.TerminationCondition;
+import com.myrontuttle.sci.evolve.api.CandidateFactory;
+import com.myrontuttle.sci.evolve.api.EvolutionEngine;
+import com.myrontuttle.sci.evolve.api.EvolutionObserver;
+import com.myrontuttle.sci.evolve.api.EvolutionaryOperator;
+import com.myrontuttle.sci.evolve.api.ExpressedFitnessEvaluator;
+import com.myrontuttle.sci.evolve.api.ExpressionStrategy;
+import com.myrontuttle.sci.evolve.api.FitnessEvaluator;
+import com.myrontuttle.sci.evolve.api.SelectionStrategy;
+import com.myrontuttle.sci.evolve.api.TerminationCondition;
+import com.myrontuttle.sci.evolve.api.EvaluatedCandidate;
+import com.myrontuttle.sci.evolve.api.PopulationStats;
+import com.myrontuttle.sci.evolve.engines.GenerationalEvolutionEngine;
 import com.myrontuttle.sci.evolve.termination.GenerationCount;
+import com.myrontuttle.sci.evolve.util.EvolutionUtils;
 
 /**
  * An implementation of island evolution in which multiple independent populations are evolved in

@@ -21,8 +21,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import com.myrontuttle.sci.evolve.EvaluatedCandidate;
-import com.myrontuttle.sci.evolve.SelectionStrategy;
+import com.myrontuttle.sci.evolve.api.SelectionStrategy;
+import com.myrontuttle.sci.evolve.api.EvaluatedCandidate;
 import com.myrontuttle.sci.evolve.util.reflection.ReflectionUtils;
 
 /**

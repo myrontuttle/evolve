@@ -1,10 +1,14 @@
-package com.myrontuttle.sci.evolve;
+package com.myrontuttle.sci.evolve.util;
 
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.uncommons.maths.statistics.DataSet;
+
+import com.myrontuttle.sci.evolve.api.EvaluatedCandidate;
+import com.myrontuttle.sci.evolve.api.PopulationStats;
+import com.myrontuttle.sci.evolve.api.TerminationCondition;
 
 public class EvolutionUtils {
     

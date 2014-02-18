@@ -13,12 +13,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //=============================================================================
-package com.myrontuttle.sci.evolve;
+package com.myrontuttle.sci.evolve.engines;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import java.util.Random;
+
+import com.myrontuttle.sci.evolve.api.CandidateFactory;
+import com.myrontuttle.sci.evolve.api.EvolutionEngine;
+import com.myrontuttle.sci.evolve.api.EvolutionaryOperator;
+import com.myrontuttle.sci.evolve.api.ExpressedCandidate;
+import com.myrontuttle.sci.evolve.api.ExpressedFitnessEvaluator;
+import com.myrontuttle.sci.evolve.api.ExpressionStrategy;
+import com.myrontuttle.sci.evolve.api.FitnessEvaluator;
+import com.myrontuttle.sci.evolve.api.TerminationCondition;
+import com.myrontuttle.sci.evolve.api.EvaluatedCandidate;
+import com.myrontuttle.sci.evolve.api.PopulationStats;
+import com.myrontuttle.sci.evolve.util.EvolutionUtils;
 
 /**
  * <p>General purpose engine for implementing Evolution Strategies.  Both (μ+λ) and (μ,λ)

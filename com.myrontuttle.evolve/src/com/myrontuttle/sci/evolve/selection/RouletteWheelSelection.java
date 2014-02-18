@@ -20,8 +20,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-import com.myrontuttle.sci.evolve.EvaluatedCandidate;
-import com.myrontuttle.sci.evolve.SelectionStrategy;
+import com.myrontuttle.sci.evolve.api.SelectionStrategy;
+import com.myrontuttle.sci.evolve.api.EvaluatedCandidate;
 
 /**
  * <p>Implements selection of <i>n</i> candidates from a population by selecting

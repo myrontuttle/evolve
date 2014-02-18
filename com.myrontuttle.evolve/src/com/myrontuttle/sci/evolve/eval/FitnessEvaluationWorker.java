@@ -13,13 +13,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //=============================================================================
-package com.myrontuttle.sci.evolve;
+package com.myrontuttle.sci.evolve.eval;
 
 import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import com.myrontuttle.sci.evolve.api.EvolutionEngine;
+import com.myrontuttle.sci.evolve.api.EvaluatedCandidate;
 import com.myrontuttle.sci.evolve.util.concurrent.ConfigurableThreadFactory;
 import com.myrontuttle.sci.evolve.util.id.IDSource;
 import com.myrontuttle.sci.evolve.util.id.IntSequenceIDSource;
@@ -33,8 +35,8 @@ import com.myrontuttle.sci.evolve.util.id.StringPrefixIDSource;
  * (http://www.terracotta.org) or similar.
  * @author Daniel Dyer
  */
-public class FitnessEvaluationWorker
-{
+public class FitnessEvaluationWorker {
+	
     // Provide each worker instance with a unique name with which to prefix its threads.
     private static final IDSource<String> WORKER_ID_SOURCE = new StringPrefixIDSource("FitnessEvaluationWorker",
                                                                                       new IntSequenceIDSource());
@@ -54,8 +56,7 @@ public class FitnessEvaluationWorker
     /**
      * Creates a FitnessEvaluationWorker that uses daemon threads.
      */
-    FitnessEvaluationWorker()
-    {
+    public FitnessEvaluationWorker() {
         this(true);
     }
 
@@ -63,8 +64,7 @@ public class FitnessEvaluationWorker
     /**
      * @param daemonWorkerThreads If true, any worker threads created will be daemon threads.
      */
-    private FitnessEvaluationWorker(boolean daemonWorkerThreads)
-    {
+    private FitnessEvaluationWorker(boolean daemonWorkerThreads) {
         ConfigurableThreadFactory threadFactory = new ConfigurableThreadFactory(WORKER_ID_SOURCE.nextID(),
                                                                                 Thread.NORM_PRIORITY,
                                                                                 daemonWorkerThreads);
@@ -78,13 +78,11 @@ public class FitnessEvaluationWorker
     }
 
 
-    public <T> Future<EvaluatedCandidate<T>> submit(FitnessEvalutationTask<T> task)
-    {
+    public <T> Future<EvaluatedCandidate<T>> submit(FitnessEvalutationTask<T> task) {
         return executor.submit(task);
     }
 
-    public <T> Future<EvaluatedCandidate<T>> submit(ExpressedFitnessEvalutationTask<T> task)
-    {
+    public <T> Future<EvaluatedCandidate<T>> submit(ExpressedFitnessEvalutationTask<T> task) {
         return executor.submit(task);
     }
 
@@ -94,8 +92,7 @@ public class FitnessEvaluationWorker
      * program will do nothing.
      * @param args Program arguments, should be empty.
      */
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         // The program will not exit immediately upon completion of the main method because
         // the worker is configured to use non-daemon threads that keep the JVM alive.
         new FitnessEvaluationWorker(false);
@@ -109,8 +106,7 @@ public class FitnessEvaluationWorker
      * @throws Throwable Any exception or error that occurs during finalisation.
      */
     @Override
-    protected void finalize() throws Throwable
-    {
+    protected void finalize() throws Throwable {
         executor.shutdown();
         super.finalize();
     }

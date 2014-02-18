@@ -18,7 +18,7 @@ package com.myrontuttle.sci.evolve.factories;
 import java.util.Arrays;
 import java.util.List;
 import org.testng.annotations.Test;
-import com.myrontuttle.sci.evolve.CandidateFactory;
+import com.myrontuttle.sci.evolve.api.CandidateFactory;
 import com.myrontuttle.sci.evolve.FrameworkTestUtils;
 import com.myrontuttle.sci.evolve.factories.StringFactory;
 

@@ -13,19 +13,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //=============================================================================
-package com.myrontuttle.sci.evolve;
+package com.myrontuttle.sci.evolve.engines;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import com.myrontuttle.sci.evolve.EvolutionEngine;
-import com.myrontuttle.sci.evolve.EvolutionObserver;
-import com.myrontuttle.sci.evolve.EvolutionaryOperator;
-import com.myrontuttle.sci.evolve.GenerationalEvolutionEngine;
-import com.myrontuttle.sci.evolve.PopulationStats;
-import com.myrontuttle.sci.evolve.TerminationCondition;
+import com.myrontuttle.sci.evolve.api.EvolutionEngine;
+import com.myrontuttle.sci.evolve.api.EvolutionObserver;
+import com.myrontuttle.sci.evolve.api.EvolutionaryOperator;
+import com.myrontuttle.sci.evolve.FrameworkTestUtils;
+import com.myrontuttle.sci.evolve.api.TerminationCondition;
+import com.myrontuttle.sci.evolve.api.PopulationStats;
+import com.myrontuttle.sci.evolve.engines.GenerationalEvolutionEngine;
+import com.myrontuttle.sci.evolve.eval.IntegerEvaluator;
 import com.myrontuttle.sci.evolve.factories.StubIntegerFactory;
 import com.myrontuttle.sci.evolve.selection.RouletteWheelSelection;
 import com.myrontuttle.sci.evolve.termination.ElapsedTime;

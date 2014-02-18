@@ -19,8 +19,8 @@ import java.util.Arrays;
 import java.util.List;
 import org.testng.Reporter;
 import org.testng.annotations.Test;
-import com.myrontuttle.sci.evolve.EvaluatedCandidate;
 import com.myrontuttle.sci.evolve.FrameworkTestUtils;
+import com.myrontuttle.sci.evolve.api.EvaluatedCandidate;
 import com.myrontuttle.sci.evolve.islands.Migration;
 import com.myrontuttle.sci.evolve.islands.RingMigration;
 

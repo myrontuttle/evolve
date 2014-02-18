@@ -20,7 +20,7 @@ import java.util.HashSet;
 import java.util.List;
 import org.testng.annotations.Test;
 import org.uncommons.maths.random.Probability;
-import com.myrontuttle.sci.evolve.EvolutionaryOperator;
+import com.myrontuttle.sci.evolve.api.EvolutionaryOperator;
 import com.myrontuttle.sci.evolve.FrameworkTestUtils;
 import com.myrontuttle.sci.evolve.operators.ListInversion;
 

@@ -17,9 +17,9 @@ package com.myrontuttle.sci.evolve.islands;
 
 import java.util.List;
 import org.testng.annotations.Test;
-import com.myrontuttle.sci.evolve.FitnessEvaluator;
+import com.myrontuttle.sci.evolve.api.FitnessEvaluator;
 import com.myrontuttle.sci.evolve.FrameworkTestUtils;
-import com.myrontuttle.sci.evolve.PopulationStats;
+import com.myrontuttle.sci.evolve.api.PopulationStats;
 import com.myrontuttle.sci.evolve.factories.StubIntegerFactory;
 import com.myrontuttle.sci.evolve.islands.IslandEvolution;
 import com.myrontuttle.sci.evolve.islands.IslandEvolutionObserver;

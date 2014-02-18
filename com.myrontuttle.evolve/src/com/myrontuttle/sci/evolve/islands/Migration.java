@@ -18,7 +18,7 @@ package com.myrontuttle.sci.evolve.islands;
 import java.util.List;
 import java.util.Random;
 
-import com.myrontuttle.sci.evolve.EvaluatedCandidate;
+import com.myrontuttle.sci.evolve.api.EvaluatedCandidate;
 
 /**
  * Strategy interface for different ways of migrating individuals between islands

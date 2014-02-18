@@ -17,8 +17,8 @@ package com.myrontuttle.sci.evolve.termination;
 
 import org.testng.annotations.Test;
 
-import com.myrontuttle.sci.evolve.PopulationStats;
-import com.myrontuttle.sci.evolve.TerminationCondition;
+import com.myrontuttle.sci.evolve.api.TerminationCondition;
+import com.myrontuttle.sci.evolve.api.PopulationStats;
 import com.myrontuttle.sci.evolve.termination.ElapsedTime;
 
 /**

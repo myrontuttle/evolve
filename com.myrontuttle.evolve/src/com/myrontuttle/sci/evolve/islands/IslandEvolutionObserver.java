@@ -15,8 +15,8 @@
 //=============================================================================
 package com.myrontuttle.sci.evolve.islands;
 
-import com.myrontuttle.sci.evolve.EvolutionObserver;
-import com.myrontuttle.sci.evolve.PopulationStats;
+import com.myrontuttle.sci.evolve.api.EvolutionObserver;
+import com.myrontuttle.sci.evolve.api.PopulationStats;
 
 /**
  * A specialisation of {@link com.myrontuttle.sci.evolve.EvolutionObserver} that, as well as

@@ -15,8 +15,8 @@
 //=============================================================================
 package com.myrontuttle.sci.evolve.termination;
 
-import com.myrontuttle.sci.evolve.PopulationStats;
-import com.myrontuttle.sci.evolve.TerminationCondition;
+import com.myrontuttle.sci.evolve.api.TerminationCondition;
+import com.myrontuttle.sci.evolve.api.PopulationStats;
 
 /**
  * {@link TerminationCondition} implementation that allows for user-initiated

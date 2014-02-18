@@ -21,7 +21,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
-import com.myrontuttle.sci.evolve.EvaluatedCandidate;
+import com.myrontuttle.sci.evolve.api.EvaluatedCandidate;
 
 /**
  * Migrates a fixed number of candidates away from each island.  Which individuals are migrated is determined

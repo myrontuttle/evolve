@@ -13,19 +13,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //=============================================================================
-package com.myrontuttle.sci.evolve;
+package com.myrontuttle.sci.evolve.eval;
+
+import java.util.List;
+
+import com.myrontuttle.sci.evolve.api.FitnessEvaluator;
 
 /**
- * Interface for implementing conditions used to terminate evolutionary algorithms.
+ * Trivial fitness evaluator for integers.  Used by unit tests.
  * @author Daniel Dyer
  */
-public interface TerminationCondition {
-    /**
-     * The condition is queried via this method to determine whether or not evolution
-     * should finish at the current point.
-     * @param populationStats Information about the current state of evolution.  This may
-     * be used to determine whether evolution should continue or not.
-     * @return true if evolution should be terminated, false otherwise.
-     */
-    boolean shouldTerminate(PopulationStats<?> PopulationStats);
+public final class IntegerEvaluator implements FitnessEvaluator<Integer> {
+
+    public double getFitness(Integer candidate,
+                             List<? extends Integer> population) {
+        return candidate;
+    }
+
+    public boolean isNatural() {
+        return true;
+    }
 }

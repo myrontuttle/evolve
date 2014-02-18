@@ -13,11 +13,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //=============================================================================
-package com.myrontuttle.sci.evolve;
+package com.myrontuttle.sci.evolve.engines;
 
 import java.util.List;
 
 import java.util.Random;
+
+import com.myrontuttle.sci.evolve.api.CandidateFactory;
+import com.myrontuttle.sci.evolve.api.EvolutionaryOperator;
+import com.myrontuttle.sci.evolve.api.ExpressedCandidate;
+import com.myrontuttle.sci.evolve.api.ExpressedFitnessEvaluator;
+import com.myrontuttle.sci.evolve.api.ExpressionStrategy;
+import com.myrontuttle.sci.evolve.api.FitnessEvaluator;
+import com.myrontuttle.sci.evolve.api.SelectionStrategy;
+import com.myrontuttle.sci.evolve.api.TerminationCondition;
+import com.myrontuttle.sci.evolve.api.EvaluatedCandidate;
+import com.myrontuttle.sci.evolve.api.PopulationStats;
+import com.myrontuttle.sci.evolve.util.EvolutionUtils;
 
 /**
  * An implementation of steady-state evolution, which is a type of evolutionary algorithm
