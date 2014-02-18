@@ -31,4 +31,11 @@ public interface ExpressionStrategy<T> {
      */
     void candidatesExpressed(List<ExpressedCandidate<T>> expressedCandidates, String populationId);
 
+	
+    /**
+     * <p>Destroy a candidate.</p>
+     * @param <T> The candidate that we are destroying.
+     * @param populationId The population this candidate belongs to
+     */
+    void destroy(T candidate, String populationId);
 }
