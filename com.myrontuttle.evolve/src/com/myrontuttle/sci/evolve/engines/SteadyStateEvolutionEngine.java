@@ -138,8 +138,6 @@ public class SteadyStateEvolutionEngine<T> extends AbstractEvolutionEngine<T>
             // Express selected candidates in the population
             List<ExpressedCandidate<T>> expressedCandidates = 
             		expressPopulation(evolutionScheme.apply(selectedCandidates, rng), populationId);
-
-            notifyPopulationExpressed(expressedCandidates, populationId);
             
             //Calculate the fitness scores for each member of the expressed population.
             offspring = evaluateExpressedPopulation(expressedCandidates);
@@ -229,8 +227,6 @@ public class SteadyStateEvolutionEngine<T> extends AbstractEvolutionEngine<T>
 
             doExpressedReplacement(candidates, offspring, 
             						eliteCount, rng);
-            
-            notifyPopulationExpressed(candidates, populationId);
             
     		return candidates;
         } else {

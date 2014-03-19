@@ -140,8 +140,6 @@ public class EvolutionStrategyEngine<T> extends AbstractEvolutionEngine<T>
             // Express each candidate in the population
             List<ExpressedCandidate<T>> expressedCandidates = 
             					expressPopulation(offspring, null);
-
-            notifyPopulationExpressed(expressedCandidates, populationId);
             
             //Calculate the fitness scores for each member of the expressed population.
             evaluatedOffspring = evaluateExpressedPopulation(expressedCandidates);
@@ -207,8 +205,6 @@ public class EvolutionStrategyEngine<T> extends AbstractEvolutionEngine<T>
             List<ExpressedCandidate<T>> newExpressedCandidates = 
             			expressPopulation(offspring.subList(0, evaluatedPopulation.size()), 
             								populationId);
-
-            notifyPopulationExpressed(newExpressedCandidates, populationId);
             
             return newExpressedCandidates;
         } else {

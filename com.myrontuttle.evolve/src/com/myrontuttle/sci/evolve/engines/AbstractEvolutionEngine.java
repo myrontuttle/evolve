@@ -365,6 +365,8 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
     														String populationId) {
         List<ExpressedCandidate<T>> expressedPopulation = 
         		new ArrayList<ExpressedCandidate<T>>(population.size());
+        
+        expressionStrategy.beforeExpression(populationId);
 
         if (singleThreaded) {
         	// Do fitness evaluations on the request thread.
@@ -397,6 +399,8 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
                 Thread.currentThread().interrupt();
             }
         }
+        
+        notifyPopulationExpressed(expressedPopulation, populationId);
         
         return expressedPopulation;
     }

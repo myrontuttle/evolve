@@ -164,8 +164,6 @@ public class GenerationalEvolutionEngine<T> extends AbstractEvolutionEngine<T>
             List<ExpressedCandidate<T>> expressedCandidates = 
             					expressPopulation(population, populationId);
             
-            notifyPopulationExpressed(expressedCandidates, populationId);
-            
             //Calculate the fitness scores for each member of the expressed population.
             return evaluateExpressedPopulation(expressedCandidates);
         } else {
@@ -217,13 +215,10 @@ public class GenerationalEvolutionEngine<T> extends AbstractEvolutionEngine<T>
             population = evolutionScheme.apply(population, rng);
             // When the evolution is finished, add the elite to the population.
             population.addAll(elite);
-            
 
             // Express each candidate in the population
             List<ExpressedCandidate<T>> newExpressedCandidates = 
             					expressPopulation(population, populationId);
-            
-            notifyPopulationExpressed(newExpressedCandidates, populationId);
             
     		return newExpressedCandidates;
         } else {

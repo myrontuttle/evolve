@@ -25,6 +25,12 @@ public interface ExpressionStrategy<T> {
     int getGenomeLength(String populationId);
     
     /**
+     * Hook to handle any group-level events before expressing candidates
+     * @param populationId The population that is about to be expressed
+     */
+    void beforeExpression(String populationId);
+    
+    /**
      * Invoked after the entire population has been expressed
      * @param expressedPopulation The list of expressed candidates
      * @param populationId The population these candidates belong to
