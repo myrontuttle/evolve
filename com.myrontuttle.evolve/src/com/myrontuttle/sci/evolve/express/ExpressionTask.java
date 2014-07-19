@@ -13,7 +13,7 @@ import com.myrontuttle.sci.evolve.api.ExpressionStrategy;
 public class ExpressionTask<T> implements Callable<ExpressedCandidate<T>> {
     private final ExpressionStrategy<T> expressionStrategy;
     private final T candidate;
-    private final String populationId;
+    private final long populationId;
 
     /**
      * Creates a task for performing expressions.
@@ -25,7 +25,7 @@ public class ExpressionTask<T> implements Callable<ExpressedCandidate<T>> {
      */
     public ExpressionTask(ExpressionStrategy<T> expressionStrategy,
                            T candidate,
-                           String populationId) {
+                           long populationId) {
         this.expressionStrategy = expressionStrategy;
         this.candidate = candidate;
         this.populationId = populationId;

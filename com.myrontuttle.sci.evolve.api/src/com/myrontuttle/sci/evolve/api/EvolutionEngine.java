@@ -45,7 +45,7 @@ public interface EvolutionEngine<T>
      * @return The fittest solution found by the evolutionary process.
      * @see #evolve(int, int, Collection, TerminationCondition[])
      */
-    T evolve(String populationId,
+    T evolve(long populationId,
     		 int populationSize,
              int eliteCount,
              TerminationCondition... conditions);
@@ -72,7 +72,7 @@ public interface EvolutionEngine<T>
      * @return The fittest solution found by the evolutionary process.
      * @see #evolve(int,int,TerminationCondition[])
      */
-    T evolve(String populationId,
+    T evolve(long populationId,
     		 int populationSize,
              int eliteCount,
              Collection<T> seedCandidates,
@@ -98,7 +98,7 @@ public interface EvolutionEngine<T>
      * @see #evolve(int, int, Collection, TerminationCondition[])
      * @see #evolvePopulation(int, int, Collection, TerminationCondition[])
      */
-    List<EvaluatedCandidate<T>> evolvePopulation(String populationId,
+    List<EvaluatedCandidate<T>> evolvePopulation(long populationId,
     											 int populationSize,
                                                  int eliteCount,
                                                  TerminationCondition... conditions);
@@ -125,7 +125,7 @@ public interface EvolutionEngine<T>
      * @see #evolve(int, int, Collection, TerminationCondition[])
      * @see #evolvePopulation(int, int, Collection, TerminationCondition[])
      */
-    List<EvaluatedCandidate<T>> evolvePopulation(String populationId,
+    List<EvaluatedCandidate<T>> evolvePopulation(long populationId,
     											 int populationSize,
                                                  int eliteCount,
                                                  Collection<T> seedCandidates,
@@ -150,7 +150,7 @@ public interface EvolutionEngine<T>
      */
     public List<ExpressedCandidate<T>> evolveToExpression(
     										List<ExpressedCandidate<T>> candidates,
-    										String populationId,
+    										long populationId,
     										int populationSize,
     										int currentGeneration,
     										int eliteCount,
@@ -163,7 +163,7 @@ public interface EvolutionEngine<T>
      * @return
      */
     public List<ExpressedCandidate<T>> expressInitialPopulation(
-											String populationId,
+											long populationId,
 											int populationSize);
 
     /**

@@ -134,7 +134,7 @@ public class GenerationalEvolutionEngine<T> extends AbstractEvolutionEngine<T>
      * {@inheritDoc} 
      */
     @Override
-    protected List<EvaluatedCandidate<T>> nextEvolutionStep(String populationId,
+    protected List<EvaluatedCandidate<T>> nextEvolutionStep(long populationId,
     						List<EvaluatedCandidate<T>> evaluatedPopulation,
                                                             int eliteCount,
                                                             Random rng) {
@@ -177,7 +177,7 @@ public class GenerationalEvolutionEngine<T> extends AbstractEvolutionEngine<T>
 	protected List<ExpressedCandidate<T>> nextExpressionStep(
 			List<ExpressedCandidate<T>> candidates, 
 			int eliteCount,
-			String populationId, Random rng) {
+			long populationId, Random rng) {
 		
 		List<EvaluatedCandidate<T>> evaluatedPopulation = 
 				evaluateExpressedPopulation(candidates);

@@ -229,7 +229,7 @@ public class IslandEvolution<T>
      * @param conditions One or more conditions that may cause the evolution to terminate.
      * @return The fittest solution found by the evolutionary process on any of the islands.
      */
-    public T evolve(String populationId,
+    public T evolve(long populationId,
     				int populationSize,
                     int eliteCount,
                     int epochLength,
@@ -303,7 +303,7 @@ public class IslandEvolution<T>
     /**
      * Create the concurrently-executed tasks that perform evolution on each island.
      */
-    private List<Callable<List<EvaluatedCandidate<T>>>> createEpochTasks(String populationId,
+    private List<Callable<List<EvaluatedCandidate<T>>>> createEpochTasks(long populationId,
     																	 int populationSize,
                                                                          int eliteCount,
                                                                          int epochLength,

@@ -78,7 +78,7 @@ public class GenerationalEvolutionEngineTest
         elite.add(7); // This candidate should be discarded by elitism.
         elite.add(11);
         elite.add(13);
-        engine.evolve(null, 10,
+        engine.evolve(0, 10,
                       2,
                       elite,
                       new GenerationCount(2)); // Do at least 2 generations because the first is just the initial population.
@@ -97,21 +97,21 @@ public class GenerationalEvolutionEngineTest
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testEliteCountTooHigh()
     {
-        engine.evolve(null, 10, 10, new GenerationCount(10)); // Should throw exception because elite is too big.
+        engine.evolve(0, 10, 10, new GenerationCount(10)); // Should throw exception because elite is too big.
     }
 
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testEliteCountTooLow()
     {
-        engine.evolvePopulation(null, 10, -1, new GenerationCount(10)); // Should throw exception because elite is negative.
+        engine.evolvePopulation(0, 10, -1, new GenerationCount(10)); // Should throw exception because elite is negative.
     }
 
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testNoTerminationConditions()
     {
-        engine.evolve(null, 10, 0); // Should throw exception because there are no termination conditions.
+        engine.evolve(0, 10, 0); // Should throw exception because there are no termination conditions.
     }
 
 
@@ -131,7 +131,7 @@ public class GenerationalEvolutionEngineTest
             }
         });
         long startTime = System.currentTimeMillis();
-        engine.evolve(null, 10, 0, new ElapsedTime(timeout));
+        engine.evolve(0, 10, 0, new ElapsedTime(timeout));
         long elapsedTime = System.currentTimeMillis() - startTime;
         assert Thread.interrupted() : "Thread was not interrupted before timeout.";
         assert elapsedTime < timeout : "Engine did not respond to interrupt before timeout.";
@@ -144,7 +144,7 @@ public class GenerationalEvolutionEngineTest
     public void testGetSatisfiedTerminationConditions()
     {
         GenerationCount generationsCondition = new GenerationCount(1);
-        engine.evolve(null, 10, 0, generationsCondition);
+        engine.evolve(0, 10, 0, generationsCondition);
         List<TerminationCondition> satisfiedConditions = engine.getSatisfiedTerminationConditions();
         assert satisfiedConditions.size() == 1 : "Wrong number of conditions: " + satisfiedConditions.size();
         assert satisfiedConditions.get(0) == generationsCondition : "Wrong condition returned.";

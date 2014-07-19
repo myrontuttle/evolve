@@ -28,14 +28,14 @@ import com.myrontuttle.sci.evolve.api.EvaluatedCandidate;
 class Epoch<T> implements Callable<List<EvaluatedCandidate<T>>>
 {
     private final EvolutionEngine<T> island;
-    private final String populationId;
+    private final long populationId;
     private final int populationSize;
     private final int eliteCount;
     private final List<T> seedCandidates;
     private final TerminationCondition[] terminationConditions;
 
     Epoch(EvolutionEngine<T> island,
-    	  String populationId,
+    	  long populationId,
           int populationSize,
           int eliteCount,
           List<T> seedCandidates,

@@ -133,7 +133,7 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
     /**
      * {@inheritDoc}
      */
-    public T evolve(String populationId,
+    public T evolve(long populationId,
     				int populationSize,
                     int eliteCount,
                     TerminationCondition... conditions) {
@@ -148,7 +148,7 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
     /**
      * {@inheritDoc}
      */
-    public T evolve(String populationId,
+    public T evolve(long populationId,
     			 	int populationSize,
                     int eliteCount,
                     Collection<T> seedCandidates,
@@ -164,7 +164,7 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
     /**
      * {@inheritDoc}
      */
-    public List<EvaluatedCandidate<T>> evolvePopulation(String populationId,
+    public List<EvaluatedCandidate<T>> evolvePopulation(long populationId,
     													int populationSize,
                                                         int eliteCount,
                                                         TerminationCondition... conditions)
@@ -179,7 +179,7 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
     /**
      * {@inheritDoc}
      */
-    public List<EvaluatedCandidate<T>> evolvePopulation(String populationId,
+    public List<EvaluatedCandidate<T>> evolvePopulation(long populationId,
     													int populationSize,
                                                         int eliteCount,
                                                         Collection<T> seedCandidates,
@@ -251,7 +251,7 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
      */
     public List<ExpressedCandidate<T>> evolveToExpression(
     										List<ExpressedCandidate<T>> candidates,
-    										String populationId,
+    										long populationId,
     										int populationSize,
     										int currentGeneration,
     										int eliteCount,
@@ -301,7 +301,7 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
      * {@inheritDoc}
      */
     public List<ExpressedCandidate<T>> expressInitialPopulation(
-    										String populationId,
+    										long populationId,
     										int populationSize) {
 
 		 List<T> population = candidateFactory.generateInitialPopulation(populationSize, rng);
@@ -336,7 +336,7 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
      * @return The updated population after the evolutionary process has proceeded
      * by one step/iteration.
      */
-    protected abstract List<EvaluatedCandidate<T>> nextEvolutionStep(String populationId,
+    protected abstract List<EvaluatedCandidate<T>> nextEvolutionStep(long populationId,
     								List<EvaluatedCandidate<T>> evaluatedPopulation,
                                                                      int eliteCount,
                                                                      Random rng);
@@ -353,7 +353,7 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
     protected abstract List<ExpressedCandidate<T>> nextExpressionStep(
     											List<ExpressedCandidate<T>> candidates,
     											int eliteCount,
-    											String populationId,
+    											long populationId,
                                                 Random rng);
 
     /**
@@ -362,7 +362,7 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
      * @return The expressed population
      */
     protected List<ExpressedCandidate<T>> expressPopulation(List<T> population, 
-    														String populationId) {
+    														long populationId) {
         List<ExpressedCandidate<T>> expressedPopulation = 
         		new ArrayList<ExpressedCandidate<T>>(population.size());
         
@@ -575,7 +575,7 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
      * @param stats Information about the current state of the population.
      */
     protected void notifyPopulationExpressed(List<ExpressedCandidate<T>> expressedCandidates, 
-    		String populationId) {
+    		long populationId) {
         expressionStrategy.candidatesExpressed(expressedCandidates, populationId);
     }
 

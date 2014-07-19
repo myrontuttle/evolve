@@ -26,7 +26,7 @@ package com.myrontuttle.sci.evolve.api;
  * @author Daniel Dyer
  */
 public final class PopulationStats<T> {
-	private final String populationId;
+	private final long populationId;
     private final T bestCandidate;
     private final double bestCandidateFitness;
     private final double meanFitness;
@@ -51,7 +51,7 @@ public final class PopulationStats<T> {
      * @param generationNumber The (zero-based) number of the last generation
      * that was processed.
      */
-    public PopulationStats(String populationId,
+    public PopulationStats(long populationId,
     					  T bestCandidate,
                           double bestCandidateFitness,
                           double meanFitness,
@@ -74,49 +74,40 @@ public final class PopulationStats<T> {
         this.elapsedTime = elapsedTime;
     }
 
-
-    public String getPopulationId() {
+    public long getPopulationId() {
 		return populationId;
 	}
-
 
 	/**
      * @return The fittest candidate present in the population.
      * @see #getBestCandidateFitness()
      */
-    public T getBestCandidate()
-    {
+    public T getBestCandidate() {
         return bestCandidate;
     }
-
 
     /**
      * @return The fitness score of the fittest candidate.
      * @see #getBestCandidateFitness()
      */
-    public double getBestCandidateFitness()
-    {
+    public double getBestCandidateFitness() {
         return bestCandidateFitness;
     }
-
 
     /**
      * Returns the average fitness score of population members.
      * @return The arithmetic mean fitness of individual candidates.
      */
-    public double getMeanFitness()
-    {
+    public double getMeanFitness() {
         return meanFitness;
     }
-
 
     /**
      * Returns a statistical measure of variation in fitness scores within
      * the population. 
      * @return Population standard deviation for fitness scores.
      */
-    public double getFitnessStandardDeviation()
-    {
+    public double getFitnessStandardDeviation() {
         return fitnessStandardDeviation;
     }
 
@@ -146,8 +137,7 @@ public final class PopulationStats<T> {
     /**
      * @return The number of candidates preserved via elitism.
      */
-    public int getEliteCount()
-    {
+    public int getEliteCount() {
         return eliteCount;
     }
     

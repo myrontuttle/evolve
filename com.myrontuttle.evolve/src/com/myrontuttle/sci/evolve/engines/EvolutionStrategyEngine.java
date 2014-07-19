@@ -115,7 +115,7 @@ public class EvolutionStrategyEngine<T> extends AbstractEvolutionEngine<T>
      * @return The updated population after the evolution strategy has advanced.
      */
     @Override
-    protected List<EvaluatedCandidate<T>> nextEvolutionStep(String populationId,
+    protected List<EvaluatedCandidate<T>> nextEvolutionStep(long populationId,
     														List<EvaluatedCandidate<T>> evaluatedPopulation,
                                                             int eliteCount,
                                                             Random rng)  {
@@ -139,7 +139,7 @@ public class EvolutionStrategyEngine<T> extends AbstractEvolutionEngine<T>
 
             // Express each candidate in the population
             List<ExpressedCandidate<T>> expressedCandidates = 
-            					expressPopulation(offspring, null);
+            					expressPopulation(offspring, 0);
             
             //Calculate the fitness scores for each member of the expressed population.
             evaluatedOffspring = evaluateExpressedPopulation(expressedCandidates);
@@ -162,7 +162,7 @@ public class EvolutionStrategyEngine<T> extends AbstractEvolutionEngine<T>
 	protected List<ExpressedCandidate<T>> nextExpressionStep(
 			List<ExpressedCandidate<T>> candidates, 
 			int eliteCount,
-			String populationId, Random rng) {
+			long populationId, Random rng) {
 
 		List<EvaluatedCandidate<T>> evaluatedPopulation = 
 				evaluateExpressedPopulation(candidates);

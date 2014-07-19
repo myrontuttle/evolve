@@ -82,7 +82,7 @@ public class EvolutionUtils {
      * @param <T> The type of entity that is being evolved.
      * @return Statistics about the current generation of evolved individuals.
      */
-    public static <T> PopulationStats<T> getPopulationStats(String populationId,
+    public static <T> PopulationStats<T> getPopulationStats(long populationId,
     							List<EvaluatedCandidate<T>> evaluatedPopulation,
                                 boolean naturalFitness,
                                 int eliteCount,

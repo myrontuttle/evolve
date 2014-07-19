@@ -45,7 +45,7 @@ public class EvolutionStrategyEngineTest
         List<EvaluatedCandidate<Integer>> population = Arrays.asList(new EvaluatedCandidate<Integer>(1, 1));
 
         List<EvaluatedCandidate<Integer>> evolvedPopulation
-            = engine.nextEvolutionStep(null, population, 0, FrameworkTestUtils.getRNG());
+            = engine.nextEvolutionStep(0, population, 0, FrameworkTestUtils.getRNG());
         assert evolvedPopulation.size() == 1 : "Population size should be 1, is " + evolvedPopulation.size();
         // The offspring is less fit than the parent (due to the -1 operator) so the parent should be retained.
         assert evolvedPopulation.get(0).getCandidate() == 1 : "Wrong individual after evolution.";
@@ -65,7 +65,7 @@ public class EvolutionStrategyEngineTest
         List<EvaluatedCandidate<Integer>> population = Arrays.asList(new EvaluatedCandidate<Integer>(1, 1));
         
         List<EvaluatedCandidate<Integer>> evolvedPopulation
-            = engine.nextEvolutionStep(null, population, 0, FrameworkTestUtils.getRNG());
+            = engine.nextEvolutionStep(0, population, 0, FrameworkTestUtils.getRNG());
         assert evolvedPopulation.size() == 1 : "Population size should be 1, is " + evolvedPopulation.size();
         // The offspring is less fit than the parent (due to the -1 operator) but the parent is not allowed to survive.
         assert evolvedPopulation.get(0).getCandidate() == 0 : "Wrong individual after evolution.";

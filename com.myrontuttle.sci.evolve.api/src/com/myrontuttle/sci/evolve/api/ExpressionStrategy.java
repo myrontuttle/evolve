@@ -15,27 +15,27 @@ public interface ExpressionStrategy<T> {
      * @param populationId The population this candidate belongs to
      * @return The expressed candidate.
      */
-    ExpressedCandidate<T> express(T candidate, String populationId);
+    ExpressedCandidate<T> express(T candidate, long populationId);
     
     /**
      * Provides the length of genome required for this expression
      * @param populationId The population this candidate belongs to
      * @return The length of the genome.
      */
-    int getGenomeLength(String populationId);
+    int getGenomeLength(long populationId);
     
     /**
      * Hook to handle any group-level events before expressing candidates
      * @param populationId The population that is about to be expressed
      */
-    void beforeExpression(String populationId);
+    void beforeExpression(long populationId);
     
     /**
      * Invoked after the entire population has been expressed
      * @param expressedPopulation The list of expressed candidates
      * @param populationId The population these candidates belong to
      */
-    void candidatesExpressed(List<ExpressedCandidate<T>> expressedCandidates, String populationId);
+    void candidatesExpressed(List<ExpressedCandidate<T>> expressedCandidates, long populationId);
 
 	
     /**
@@ -43,5 +43,5 @@ public interface ExpressionStrategy<T> {
      * @param <T> The candidate that we are destroying.
      * @param populationId The population this candidate belongs to
      */
-    void destroy(T candidate, String populationId);
+    void destroy(T candidate, long populationId);
 }
