@@ -373,6 +373,7 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
             for (T candidate : population) {
             	expressedPopulation.add(expressionStrategy.express(candidate, populationId));
             }
+            notifyPopulationExpressed(expressedPopulation, populationId);
         } else {
             // Divide the required number of expressions equally among the
             // available processors and coordinate the threads so that we do not
@@ -397,10 +398,10 @@ public abstract class AbstractEvolutionEngine<T> implements EvolutionEngine<T>
                 // Restore the interrupted status, allows methods further up the call-stack
                 // to abort processing if appropriate.
                 Thread.currentThread().interrupt();
+            } finally {
+            	notifyPopulationExpressed(expressedPopulation, populationId);
             }
         }
-        
-        notifyPopulationExpressed(expressedPopulation, populationId);
         
         return expressedPopulation;
     }
